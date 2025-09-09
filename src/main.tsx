@@ -10,6 +10,8 @@ import "styles/global.css";
 import { AppProvider } from "./components/context/app.context";
 import ProtectedRoute from "./components/auth";
 import LayoutAdmin from "./components/layout/layout.admin";
+import PostPage from "./pages/client/PostPage";
+import PostDetailPage from "./pages/client/PostDetailPage";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +21,14 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <HomePage></HomePage>,
+      },
+      {
+        path: "/post",
+        element: <PostPage></PostPage>,
+      },
+      {
+        path: "/posts/:id",
+        element: <PostDetailPage />,
       },
     ],
   },

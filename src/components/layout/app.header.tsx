@@ -93,7 +93,7 @@ const AppHeader: React.FC = () => {
           <a href="#" className="hover:text-red-500">
             Giảng viên
           </a>
-          <a href="#" className="hover:text-red-500">
+          <a href="/post" className="hover:text-red-500">
             Tin tức
           </a>
           <a href="#" className="hover:text-red-500">

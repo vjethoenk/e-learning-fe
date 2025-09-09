@@ -5,6 +5,7 @@ const HomePage = () => {
       <section className="container ">
         <img src={banner} className="w-full h-auto object-cover" />
       </section>
+      <div>hello</div>
     </div>
   );
 };
