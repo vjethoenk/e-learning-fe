@@ -10,6 +10,7 @@ import "styles/global.css";
 import { AppProvider } from "./components/context/app.context";
 import ProtectedRoute from "./components/auth";
 import LayoutAdmin from "./components/layout/layout.admin";
+import Dashboard from "./pages/admin/dashboard";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,15 @@ const router = createBrowserRouter([
         <LayoutAdmin />
       </ProtectedRoute>
     ),
+    children: [
+      {
+        path: "/admin",
+        element: <Dashboard></Dashboard>,
+      },
+      {
+        path: "/admin/books",
+      },
+    ],
   },
 
   { path: "/login", element: <LoginPage></LoginPage> },

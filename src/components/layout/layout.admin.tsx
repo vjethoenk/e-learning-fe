@@ -1,163 +1,289 @@
-import { useState } from "react";
+import logo from "@/assets/el.png";
+import { Outlet } from "react-router-dom";
 
 const LayoutAdmin = () => {
-  const [open, setOpen] = useState(false);
   return (
     <>
-      <body className="bg-gray-900 text-gray-200">
-        <div className="flex h-screen">
-          <div className="w-64 bg-gray-800 flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-center px-6 py-4">
-                <h1 className="text-2xl">Admin</h1>
-              </div>
-
-              <nav className="mt-4">
-                <a
-                  href="#"
-                  className="flex items-center px-6 py-2 text-gray-100 bg-gray-700 rounded-md"
+      <nav className="bg-white border-b border-gray-200 fixed z-30 w-full">
+        <div className="px-3 py-3 lg:px-5 lg:pl-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center justify-start">
+              <button
+                id="toggleSidebarMobile"
+                aria-expanded="true"
+                aria-controls="sidebar"
+                className="lg:hidden mr-2 text-gray-600 hover:text-gray-900 cursor-pointer p-2 hover:bg-gray-100 focus:bg-gray-100 focus:ring-2 focus:ring-gray-100 rounded"
+              >
+                <svg
+                  id="toggleSidebarMobileHamburger"
+                  className="w-6 h-6"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  <svg
-                    className="w-5 h-5 mr-3"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-                  </svg>
-                  Dashboard
-                </a>
-
-                <div className="mt-2">
-                  {/* Button toggle */}
-                  <button
-                    onClick={() => setOpen(!open)}
-                    className="flex items-center px-6 py-2 w-full hover:bg-gray-700 rounded-md"
-                  >
+                  <path
+                    fill-rule="evenodd"
+                    d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                <svg
+                  id="toggleSidebarMobileClose"
+                  className="w-6 h-6 hidden"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </button>
+              <a
+                href=""
+                className="text-xl font-bold flex items-center lg:ml-2.5"
+              >
+                <img src={logo} alt="Logo" className="h-8 w-8" />
+                <span className="font-bold text-xl text-gray-900 ml-1">
+                  F4 <span className="text-red-600">FullStack</span>
+                </span>
+              </a>
+              <form
+                action="#"
+                method="GET"
+                className="hidden lg:block lg:pl-32"
+              >
+                <label htmlFor="topbar-search" className="sr-only">
+                  Search
+                </label>
+                <div className="mt-1 relative lg:w-64">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg
-                      className="w-5 h-5 mr-3"
+                      className="w-5 h-5 text-gray-500"
                       fill="currentColor"
-                      viewBox="0 0 24 24"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 
-            1.34-3 3 1.34 3 3 3zm-8 
-            0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 
-            5 5 6.34 5 8s1.34 3 3 
-            3zm0 2c-2.33 0-7 1.17-7 
-            3.5V20h14v-3.5C15 14.17 10.33 13 
-            8 13zm8 0c-.29 0-.62.02-.97.05 
-            1.16.84 1.97 1.97 1.97 
-            3.45V20h6v-3.5c0-2.33-4.67-3.5-7-3.5z"
-                      />
+                        fill-rule="evenodd"
+                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                        clip-rule="evenodd"
+                      ></path>
                     </svg>
-                    Teams
-                    <svg
-                      className={`ml-auto w-4 h-4 transform transition-transform duration-200 ${
-                        open ? "rotate-180" : "rotate-0"
-                      }`}
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-
-                  {/* Submenu */}
-                  <div
-                    className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                      open ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
-                    }`}
-                  >
-                    <div className="ml-9 rounded-md p-2 space-y-1 text-sm">
-                      <a
-                        href="#"
-                        className="block px-3 py-1 rounded-md hover:bg-gray-600/50 hover:text-white transition"
-                      >
-                        Engineering
-                      </a>
-                      <a
-                        href="#"
-                        className="block px-3 py-1 rounded-md hover:bg-gray-600/50 hover:text-white transition"
-                      >
-                        Human Resources
-                      </a>
-                      <a
-                        href="#"
-                        className="block px-3 py-1 rounded-md hover:bg-gray-600/50 hover:text-white transition"
-                      >
-                        Customer Success
-                      </a>
-                    </div>
                   </div>
+                  <input
+                    type="text"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full pl-10 p-2.5"
+                    placeholder="Search"
+                  />
                 </div>
-                <a
-                  href="#"
-                  className="flex items-center px-6 py-2 hover:bg-gray-700 rounded-md"
-                >
-                  <svg
-                    className="w-5 h-5 mr-3"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M7 11h10v2H7zm0 4h7v2H7z" />
-                    <path
-                      d="M5 4h2V2h2v2h6V2h2v2h2c1.1 
-              0 2 .9 2 2v14c0 1.1-.9 2-2 
-              2H5c-1.1 0-2-.9-2-2V6c0-1.1.9-2 
-              2-2zm0 4v12h14V8H5z"
-                    />
-                  </svg>
-                  Calendar
-                </a>
-                <a
-                  href="#"
-                  className="flex items-center px-6 py-2 hover:bg-gray-700 rounded-md"
-                >
-                  <svg
-                    className="w-5 h-5 mr-3"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M6 2h9l5 5v15a2 2 0 0 1-2 
-              2H6a2 2 0 0 1-2-2V4c0-1.1.9-2 
-              2-2z"
-                    />
-                  </svg>
-                  Documents
-                </a>
-                <a
-                  href="#"
-                  className="flex items-center px-6 py-2 hover:bg-gray-700 rounded-md"
-                >
-                  <svg
-                    className="w-5 h-5 mr-3"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 
-              8h14v-2H7v2zm0-4h14v-2H7v2zm0-6v2h14V7H7z"
-                    />
-                  </svg>
-                  Reports
-                </a>
-              </nav>
+              </form>
             </div>
+            <div className="flex items-center">
+              <button
+                id="toggleSidebarMobileSearch"
+                type="button"
+                className="lg:hidden text-gray-500 hover:text-gray-900 hover:bg-gray-100 p-2 rounded-lg"
+              >
+                <span className="sr-only">Search</span>
 
-            <div className="flex items-center p-4 border-t border-gray-700">
-              {/* <img className="w-10 h-10 rounded-full" src="https://i.pravatar.cc/40" alt="User"> */}
-              <span className="ml-3 font-medium">Tom Cook</span>
+                <svg
+                  className="w-6 h-6"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </button>
+              <div className="hidden lg:flex items-center">
+                <span className="text-base font-normal text-gray-500 mr-5">
+                  Open source ❤️
+                </span>
+              </div>
+              <a
+                href=""
+                className="hidden sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center items-center mr-3"
+              >
+                <svg
+                  className="svg-inline--fa fa-gem -ml-1 mr-2 h-4 w-4"
+                  aria-hidden="true"
+                  focusable="false"
+                  data-prefix="fas"
+                  data-icon="gem"
+                  role="img"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M378.7 32H133.3L256 182.7L378.7 32zM512 192l-107.4-141.3L289.6 192H512zM107.4 50.67L0 192h222.4L107.4 50.67zM244.3 474.9C247.3 478.2 251.6 480 256 480s8.653-1.828 11.67-5.062L510.6 224H1.365L244.3 474.9z"
+                  ></path>
+                </svg>
+                Upgrade to Pro
+              </a>
             </div>
-          </div>
-
-          <div className="flex-1 p-6">
-            <h1 className="text-xl text-white">Main Content Area</h1>
           </div>
         </div>
-      </body>
+      </nav>
+
+      <aside
+        id="sidebar"
+        className="fixed hidden z-20 h-full top-0 left-0 pt-16 flex lg:flex flex-shrink-0 flex-col w-64 transition-width duration-75"
+        aria-label="Sidebar"
+      >
+        <div className="relative flex-1 flex flex-col min-h-0 border-r border-gray-200 bg-white pt-0">
+          <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+            <div className="flex-1 px-3 bg-white divide-y space-y-1">
+              <ul className="space-y-2 pb-2">
+                <li>
+                  <form action="#" method="GET" className="lg:hidden">
+                    <label htmlFor="mobile-search" className="sr-only">
+                      Search
+                    </label>
+
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg
+                          className="w-5 h-5 text-gray-500"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                        </svg>
+                      </div>
+                      <input
+                        type="text"
+                        name=""
+                        id=""
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-600 focus:ring-cyan-600 block w-full pl-10 p-2.5"
+                        placeholder="Search"
+                      />
+                    </div>
+                  </form>
+                </li>
+                <li>
+                  <a
+                    href=""
+                    className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group"
+                  >
+                    <svg
+                      className="w-6 h-6 text-gray-500 group-hover:text-gray-900 transition duration-75"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                      <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+                    </svg>
+                    <span className="ml-3">Dashboard</span>
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href=""
+                    className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group"
+                  >
+                    <svg
+                      className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                    <span className="ml-3 flex-1 whitespace-nowrap">Users</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href=""
+                    className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group"
+                  >
+                    <svg
+                      className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                    <span className="ml-3 flex-1 whitespace-nowrap">
+                      Products
+                    </span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href=""
+                    className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group"
+                  >
+                    <svg
+                      className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                    <span className="ml-3 flex-1 whitespace-nowrap">
+                      Sign In
+                    </span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href=""
+                    className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
+                  >
+                    <svg
+                      className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M5 4a3 3 0 00-3 3v6a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H5zm-1 9v-1h5v2H5a1 1 0 01-1-1zm7 1h4a1 1 0 001-1v-1h-5v2zm0-4h5V8h-5v2zM9 8H4v2h5V8z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                    <span className="ml-3 flex-1 whitespace-nowrap">
+                      Sign Up
+                    </span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <main className="pt-16 lg:ml-64 bg-gray-50 min-h-screen">
+        <div className="p-4">
+          <Outlet />
+        </div>
+      </main>
     </>
   );
 };
