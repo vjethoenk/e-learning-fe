@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { callLogin } from "@/services/api";
 import { useCurrentApp } from "@/components/context/app.context";
+import { toast } from "react-toastify";
 
 type LoginValues = {
   email: string;
@@ -24,9 +25,9 @@ export default function LoginForm() {
       setUser(res.data.user);
 
       navigate("/");
-      alert("Đăng nhập thành công!");
+      toast.success("Đăng nhập thành công!");
     } else {
-      alert("Đăng nhập thất bại: " + res?.message);
+      toast.error("Đăng nhập thất bại: " + res?.message);
       setLoading(false);
     }
   };

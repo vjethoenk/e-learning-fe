@@ -11,6 +11,9 @@ import { AppProvider } from "./components/context/app.context";
 import ProtectedRoute from "./components/auth";
 import LayoutAdmin from "./components/layout/layout.admin";
 import Dashboard from "./pages/admin/dashboard";
+import User from "./pages/admin/user";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 const router = createBrowserRouter([
   {
@@ -36,7 +39,8 @@ const router = createBrowserRouter([
         element: <Dashboard></Dashboard>,
       },
       {
-        path: "/admin/books",
+        path: "/admin/user",
+        element: <User></User>,
       },
     ],
   },
@@ -49,6 +53,7 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <AppProvider>
       <RouterProvider router={router} />
+      <ToastContainer />
     </AppProvider>
   </StrictMode>
 );

@@ -7,25 +7,28 @@ declare global {
     data?: T;
   }
   interface IModelPaginate<T> {
-    meta: {
-      current: number;
-      pageSize: number;
-      pages: number;
-      total: number;
+    data: {
+      meta: {
+        current: number;
+        pageSize: number;
+        pages: number;
+        total: number;
+      };
+      result: T[];
     };
-    results: T[];
   }
 
   interface ILogin {
     access_token: string;
-    user: {
-      email: string;
-      phone: string;
-      name: string;
-      role: string;
-      avatar: string;
-      id: string;
-    };
+    // user: {
+    //   email: string;
+    //   phone: string;
+    //   name: string;
+    //   role: string;
+    //   avatar: string;
+    //   id: string;
+    // };
+    user: IUser;
   }
 
   interface IRegister {
@@ -44,7 +47,32 @@ declare global {
     avatar: string;
     id: string;
   }
+  interface IUserTable {
+    email: string;
+    phone: string;
+    name: string;
+    role: string;
+    _id: string;
+    age: number;
+    gender: string;
+    password: string;
+    isDeleted: boolean;
+  }
+  interface ICreateUser {
+    name: string;
+    email: string;
+    role: string;
+    gender: string;
+    phone: string;
+    age: number;
+    password: string;
+  }
   interface IFetchAccount {
     user: IUser;
+  }
+
+  interface IRole {
+    name: string;
+    _id: string;
   }
 }
