@@ -84,4 +84,17 @@ declare global {
     };
     createdAt: Date;
   }
+  interface ICourseTable {
+    _id: string;
+    title: string;
+    description: string;
+    thumbnail: string;
+    price: number;
+    categoryId: string;
+    createBy: {
+      _id: string;
+      email: string;
+      name: string;
+    };
+  }
 }
