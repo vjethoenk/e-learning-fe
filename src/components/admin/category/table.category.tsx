@@ -1,20 +1,17 @@
-import avatar from "@/assets/avatar.jpg";
-import { useEffect, useState } from "react";
-import CreateUser from "./create.user";
-import { callUserApi, getAllRole, getByUserId } from "@/services/api";
-import UpdateUser from "./update.user";
-import DeleteUser from "./delete.user";
 import Pagination from "@/common/Pagination";
 import SearchBox from "@/common/SearchBox";
-import { Listbox } from "@headlessui/react";
-import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
-const TableUser = () => {
+import { getAllCategory, getByCategoryId } from "@/services/api";
+import { useEffect, useState } from "react";
+import CreateCategory from "./create.category";
+import UpdateCategory from "./update.category";
+import DeleteCategory from "./delete.category";
+
+const TableCategory = () => {
+  const [category, setCategory] = useState<ICategoryTable[]>([]);
+  const [dataCategory, setDataCategory] = useState<ICategoryTable | null>(null);
   const [openModelCreate, setOpenModelCreate] = useState<boolean>(false);
   const [openModelUpdate, setOpenModelUpdate] = useState<boolean>(false);
   const [openModelDelete, setOpenModelDelete] = useState<boolean>(false);
-  const [dataUser, setDataUser] = useState<IUserTable | null>(null);
-  const [user, setUser] = useState<IUserTable[]>([]);
-  const [roles, setRoles] = useState<IRole[]>([]);
   const [idDelete, setIdDelete] = useState<string>("");
   const [meta, setMeta] = useState<{
     current: number;
@@ -28,32 +25,19 @@ const TableUser = () => {
     pageSize: 5,
     sort: "-createdAt",
     name: "",
-    role: "",
   });
-  const reloadTable = async () => {
-    const query = `?current=1&pageSize=5&sort=-createdAt`;
-    const res = await callUserApi(query);
-    if (res && res.data.result) {
-      setUser(res.data.result);
-    }
-  };
-
   const fetchData = async () => {
     try {
-      const { current, pageSize, sort, name, role } = queryParams;
+      const { current, pageSize, sort, name } = queryParams;
       let query = `?current=${current}&pageSize=${pageSize}&sort=${sort}`;
       if (name) query += `&name=/${name}/i`;
-      if (role) query += `&role=${role}`;
 
-      const res = await callUserApi(query);
+      const res = await getAllCategory(query);
       if (res?.data?.result) {
-        setUser(res.data.result);
+        console.log("Result:", res.data.result);
+        console.log("Meta:", res.data.meta);
+        setCategory(res.data.result);
         setMeta(res.data.meta);
-      }
-
-      const roleRes = await getAllRole();
-      if (roleRes?.data) {
-        setRoles(roleRes.data);
       }
     } catch (err) {
       console.error("Fetch failed:", err);
@@ -62,19 +46,19 @@ const TableUser = () => {
   useEffect(() => {
     fetchData();
   }, [queryParams]);
-
-  const getRoleName = (roleId: string) => {
-    const role = roles.find((r) => r._id === roleId);
-    return role ? role.name : "Unknown";
-  };
-
-  const callApiUserById = async (id: string) => {
-    const res = await getByUserId(id);
-    if (res.data) {
-      setDataUser(res.data);
+  const reloadTable = async () => {
+    const query = `?current=1&pageSize=5&sort=-createdAt`;
+    const res = await getAllCategory(query);
+    if (res && res.data.result) {
+      setCategory(res.data.result);
     }
   };
-
+  const callApiCategoryById = async (id: string) => {
+    const res = await getByCategoryId(id);
+    if (res.data) {
+      setDataCategory(res.data);
+    }
+  };
   return (
     <>
       <div className="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5">
@@ -116,7 +100,7 @@ const TableUser = () => {
                       href="#"
                       className="text-gray-700 hover:text-gray-900 ml-1 md:ml-2 text-sm font-medium"
                     >
-                      Users
+                      Category
                     </a>
                   </div>
                 </li>
@@ -145,7 +129,7 @@ const TableUser = () => {
               </ol>
             </nav>
             <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">
-              All users
+              All category
             </h1>
           </div>
           <div className="sm:flex">
@@ -162,78 +146,6 @@ const TableUser = () => {
             />
 
             <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-              <Listbox
-                value={queryParams.role}
-                onChange={(val) =>
-                  setQueryParams((prev) => ({ ...prev, current: 1, role: val }))
-                }
-              >
-                <div className="w[38px]">
-                  <div className="relative">
-                    <Listbox.Button className="relative w-full cursor-default rounded-lg border border-gray-300 bg-white py-2 pl-4 pr-10 text-left shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                      <span className="block truncate text-sm text-gray-800">
-                        {roles.find((r) => r._id === queryParams.role)?.name ??
-                          "All Roles"}
-                      </span>
-                      <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                        <ChevronDownIcon
-                          className="h-5 w-5 text-gray-400"
-                          aria-hidden
-                        />
-                      </span>
-                    </Listbox.Button>
-
-                    <Listbox.Options className="absolute mt-2 max-h-60 w-full overflow-auto rounded-lg bg-white py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-none z-10">
-                      <Listbox.Option value="">
-                        {({ active, selected }) => (
-                          <div
-                            className={`${
-                              active ? "bg-gray-100" : ""
-                            } px-4 py-2`}
-                          >
-                            <span
-                              className={`block truncate ${
-                                selected
-                                  ? "font-medium text-gray-900"
-                                  : "text-gray-700"
-                              }`}
-                            >
-                              All Roles
-                            </span>
-                          </div>
-                        )}
-                      </Listbox.Option>
-
-                      {roles.map((role) => (
-                        <Listbox.Option key={role._id} value={role._id}>
-                          {({ active, selected }) => (
-                            <div
-                              className={`${
-                                active
-                                  ? "bg-gray-100 cursor-pointer transition"
-                                  : ""
-                              } px-4 py-2 flex items-center justify-between`}
-                            >
-                              <span
-                                className={`${
-                                  selected
-                                    ? "font-medium text-gray-900"
-                                    : "text-gray-700"
-                                }`}
-                              >
-                                {role.name}
-                              </span>
-                              {selected && (
-                                <CheckIcon className="h-4 w-4 text-cyan-600" />
-                              )}
-                            </div>
-                          )}
-                        </Listbox.Option>
-                      ))}
-                    </Listbox.Options>
-                  </div>
-                </div>
-              </Listbox>
               <button
                 type="button"
                 data-modal-toggle="add-user-modal"
@@ -252,7 +164,7 @@ const TableUser = () => {
                     clip-rule="evenodd"
                   ></path>
                 </svg>
-                Add user
+                Add category
               </button>
             </div>
           </div>
@@ -294,24 +206,19 @@ const TableUser = () => {
                       scope="col"
                       className="p-4 text-left text-xs font-medium text-gray-500 uppercase"
                     >
-                      Gender
+                      Create By
                     </th>
                     <th
                       scope="col"
                       className="p-4 text-left text-xs font-medium text-gray-500 uppercase"
                     >
-                      Phone Number
+                      Created At
                     </th>
-                    <th
-                      scope="col"
-                      className="p-4 text-left text-xs font-medium text-gray-500 uppercase"
-                    >
-                      <div className="ml-1">Role</div>
-                    </th>
+
                     <th scope="col" className="p-4"></th>
                   </tr>
                 </thead>
-                {user.map((item: any) => (
+                {category.map((item: any) => (
                   <>
                     {item.isDeleted === false ? (
                       <tbody className="bg-white divide-y divide-gray-200">
@@ -337,44 +244,17 @@ const TableUser = () => {
                               {item._id}
                             </div>
                           </td>
-                          <td className="p-4 flex items-center whitespace-nowrap space-x-6 mr-12 lg:mr-0">
-                            <img
-                              className="h-10 w-10 rounded-full"
-                              src={avatar}
-                              alt=""
-                            />
-                            <div className="text-sm font-normal text-gray-500">
-                              <div className="text-base font-semibold text-gray-900">
-                                {item.name}
-                              </div>
-                              <div className="text-sm font-normal text-gray-500">
-                                {item.email}
-                              </div>
-                            </div>
-                          </td>
+
                           <td className="p-4 whitespace-nowrap text-base font-semibold text-gray-900 ">
-                            <div className="ml-1">{item.gender}</div>
+                            <div className="ml-1">{item.name}</div>
                           </td>
                           <td className="p-4 whitespace-nowrap text-base font-semibold text-gray-900">
-                            0{item.phone}
+                            {item.createBy.email}
                           </td>
                           <td className="p-4 whitespace-nowrap text-base font-semibold text-gray-900">
-                            <div className="flex items-center">
-                              <div
-                                className={`h-2 w-2 rounded-full mr-2 ${
-                                  getRoleName(item.role) === "ADMIN"
-                                    ? "bg-red-400"
-                                    : getRoleName(item.role) === "USER"
-                                    ? "bg-green-400"
-                                    : "bg-blue-400"
-                                }`}
-                              ></div>
-                              <div className="font-semibold">
-                                <div className="font-semibold">
-                                  {getRoleName(item.role)}
-                                </div>
-                              </div>
-                            </div>
+                            {new Date(item.createdAt).toLocaleDateString(
+                              "vi-VN"
+                            )}
                           </td>
 
                           <td className="p-4 whitespace-nowrap space-x-2">
@@ -383,7 +263,7 @@ const TableUser = () => {
                               data-modal-toggle="user-modal"
                               onClick={() => {
                                 setOpenModelUpdate(true),
-                                  callApiUserById(item._id);
+                                callApiCategoryById(item._id);
                               }}
                               className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm inline-flex items-center px-3 py-2 text-center"
                             >
@@ -451,28 +331,28 @@ const TableUser = () => {
         )}
       </div>
 
-      <CreateUser
+      <CreateCategory
         openModelCreate={openModelCreate}
         setOpenModelCreate={setOpenModelCreate}
         reloadTable={reloadTable}
-      ></CreateUser>
+      ></CreateCategory>
 
-      <UpdateUser
+      <UpdateCategory
         openModelUpdate={openModelUpdate}
         setOpenModelUpdate={setOpenModelUpdate}
         reloadTable={reloadTable}
-        dataUser={dataUser}
-        setDataUser={setDataUser}
-      ></UpdateUser>
+        dataCategory={dataCategory}
+        setDataCategory={setDataCategory}
+      ></UpdateCategory>
 
-      <DeleteUser
+      <DeleteCategory
         openModelDelete={openModelDelete}
         setOpenModelDelete={setOpenModelDelete}
         reloadTable={reloadTable}
         idDelete={idDelete}
         setIdDelete={setIdDelete}
-      ></DeleteUser>
+      ></DeleteCategory>
     </>
   );
 };
-export default TableUser;
+export default TableCategory;

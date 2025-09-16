@@ -11,7 +11,6 @@ const AppHeader: React.FC = () => {
   const [openUserMenu, setOpenUserMenu] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
-  // Đóng menu khi click ra ngoài
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (

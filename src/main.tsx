@@ -14,6 +14,8 @@ import Dashboard from "./pages/admin/dashboard";
 import User from "./pages/admin/user";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import Category from "./pages/admin/category";
+import Course from "./pages/admin/course";
 
 const router = createBrowserRouter([
   {
@@ -29,7 +31,7 @@ const router = createBrowserRouter([
   {
     path: "admin",
     element: (
-      <ProtectedRoute roles={["ADMIN"]}>
+      <ProtectedRoute roles={["ADMIN", "INSTRUCTOR"]}>
         <LayoutAdmin />
       </ProtectedRoute>
     ),
@@ -41,6 +43,14 @@ const router = createBrowserRouter([
       {
         path: "/admin/user",
         element: <User></User>,
+      },
+      {
+        path: "/admin/category",
+        element: <Category></Category>,
+      },
+      {
+        path: "/admin/course",
+        element: <Course></Course>,
       },
     ],
   },

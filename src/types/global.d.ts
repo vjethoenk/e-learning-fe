@@ -75,4 +75,13 @@ declare global {
     name: string;
     _id: string;
   }
+  interface ICategoryTable {
+    _id: string;
+    name: string;
+    createBy: {
+      _id: string;
+      email: string;
+    };
+    createdAt: Date;
+  }
 }

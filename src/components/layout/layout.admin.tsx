@@ -1,7 +1,13 @@
 import logo from "@/assets/el.png";
 import { Link, Outlet } from "react-router-dom";
+import { useCurrentApp } from "../context/app.context";
+import { AcademicCapIcon, BookOpenIcon } from "@heroicons/react/20/solid";
+import { useState } from "react";
 
 const LayoutAdmin = () => {
+  const { user } = useCurrentApp();
+  const [open, setOpen] = useState(false);
+  const [openContent, setOpenContent] = useState(false);
   return (
     <>
       <nav className="bg-white border-b border-gray-200 fixed z-30 w-full">
@@ -169,43 +175,153 @@ const LayoutAdmin = () => {
                     </div>
                   </form>
                 </li>
-                <li>
-                  <a
-                    href=""
-                    className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group"
-                  >
-                    <svg
-                      className="w-6 h-6 text-gray-500 group-hover:text-gray-900 transition duration-75"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
-                      <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
-                    </svg>
-                    <span className="ml-3">Dashboard</span>
-                  </a>
-                </li>
 
-                <li>
-                  <Link
-                    to={"/admin/user"}
-                    className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group"
+                {user?.role.name === "ADMIN" ? (
+                  <>
+                    <li>
+                      <a
+                        href=""
+                        className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group"
+                      >
+                        <svg
+                          className="w-6 h-6 text-gray-500 group-hover:text-gray-900 transition duration-75"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                          <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+                        </svg>
+                        <span className="ml-3">Dashboard</span>
+                      </a>
+                    </li>{" "}
+                    <li>
+                      <Link
+                        to={"/admin/user"}
+                        className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group"
+                      >
+                        <svg
+                          className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                            clip-rule="evenodd"
+                          ></path>
+                        </svg>
+                        <span className="ml-3 flex-1 whitespace-nowrap">
+                          Users
+                        </span>
+                      </Link>
+                    </li>
+                  </>
+                ) : (
+                  <></>
+                )}
+                <li className="group">
+                  <button
+                    className="w-full text-left text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100"
+                    onClick={() => setOpen(!open)}
                   >
+                    <AcademicCapIcon className="w-6 h-6 text-gray-500 flex-shrink-0 transition duration-75" />
+                    <span className="ml-3 flex-1 whitespace-nowrap">
+                      Education
+                    </span>
                     <svg
-                      className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
+                      className={`w-4 h-4 ml-auto transition-transform duration-300 ${
+                        open ? "rotate-90" : ""
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        fill-rule="evenodd"
-                        d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                        clip-rule="evenodd"
-                      ></path>
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
                     </svg>
-                    <span className="ml-3 flex-1 whitespace-nowrap">Users</span>
-                  </Link>
+                  </button>
+
+                  {/* Submenu */}
+                  <ul
+                    className={`overflow-hidden transition-all duration-300 ${
+                      open ? "max-h-40" : "max-h-0"
+                    }`}
+                  >
+                    <li>
+                      <Link
+                        to={"/admin/category"}
+                        className="block px-8 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                      >
+                        Category
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to={"/admin/course"}
+                        className="block px-8 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                      >
+                        Courses
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
+
+                <li className="group">
+                  <button
+                    className="w-full text-left text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100"
+                    onClick={() => setOpenContent(!openContent)}
+                  >
+                    <BookOpenIcon className="w-6 h-6 text-gray-500 flex-shrink-0 transition duration-75" />
+                    <span className="ml-3 flex-1 whitespace-nowrap">
+                      Content
+                    </span>
+                    <svg
+                      className={`w-4 h-4 ml-auto transition-transform duration-300 ${
+                        open ? "rotate-90" : ""
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </button>
+
+                  <ul
+                    className={`overflow-hidden transition-all duration-300 ${
+                      openContent ? "max-h-40" : "max-h-0"
+                    }`}
+                  >
+                    <li>
+                      <a
+                        href="#"
+                        className="block px-8 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                      >
+                        Contents
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        className="block px-8 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                      >
+                        Lessons
+                      </a>
+                    </li>
+                  </ul>
                 </li>
                 <li>
                   <a
