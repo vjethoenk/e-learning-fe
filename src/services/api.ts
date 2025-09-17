@@ -1,4 +1,5 @@
 import type { ICreateCategory } from "@/components/admin/category/create.category";
+import type { ICreateChapter } from "@/components/admin/chapter/create.chapter";
 import type { ICreateCourse } from "@/components/admin/courses/create.course";
 import axios from "services/axios.customize";
 export const callLogin = async (username: string, password: string) => {
@@ -94,8 +95,27 @@ export const updateCourse = async (data: ICreateCourse, id: string) => {
   await new Promise((r) => setTimeout(r, 2000));
   return axios.put<IBackendRes<ICreateCourse>>(`/courses/${id}`, data);
 };
-
 //End Course
+
+//APIs Chapter
+export const getAllChapter = async (id: string) => {
+  await new Promise((r) => setTimeout(r, 1000));
+  return axios.get(`/sections/course/${id}`);
+};
+export const createChapter = async (data: ICreateChapter) => {
+  return axios.post<IBackendRes<ICreateChapter>>(`/sections`, data);
+};
+export const updateChapter = async (data: ICreateChapter, id: string) => {
+  await new Promise((r) => setTimeout(r, 2000));
+  return axios.put<IBackendRes<ICreateChapter>>(`/sections/${id}`, data);
+};
+export const getByChapterId = async (id: string) => {
+  return axios.get(`/sections/${id}`);
+};
+export const deleteChapter = async (id: string) => {
+  return axios.delete<IBackendRes<IChapterTable>>(`sections/${id}`);
+};
+//End Chapter
 
 //UploadFile
 export const uploadFile = async (file: File) => {

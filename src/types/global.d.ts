@@ -46,6 +46,7 @@ declare global {
     };
     avatar: string;
     _id: string;
+    isDeleted: boolean;
   }
   interface IUserTable {
     email: string;
@@ -96,5 +97,16 @@ declare global {
       email: string;
       name: string;
     };
+  }
+  interface IChapterTable {
+    _id: string;
+    title: string;
+    order: number;
+    courseId: string;
+    createBy: {
+      _id: string;
+      email: string;
+    };
+    isDeleted: false;
   }
 }

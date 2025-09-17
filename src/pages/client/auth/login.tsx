@@ -18,8 +18,8 @@ export default function LoginForm() {
   const onFinish = async (values: LoginValues) => {
     setLoading(true);
     const res = await callLogin(values.email, values.password);
-
-    if (res?.data) {
+    console.log("Is Delete:", res.data?.user);
+    if (res?.data && res.data.user.isDeleted === false) {
       localStorage.setItem("access_token", res.data.access_token);
       setIsAuthenticated(true);
       setUser(res.data.user);
