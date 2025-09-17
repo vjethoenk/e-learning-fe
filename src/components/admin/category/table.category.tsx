@@ -34,8 +34,6 @@ const TableCategory = () => {
 
       const res = await getAllCategory(query);
       if (res?.data?.result) {
-        console.log("Result:", res.data.result);
-        console.log("Meta:", res.data.meta);
         setCategory(res.data.result);
         setMeta(res.data.meta);
       }
@@ -263,7 +261,7 @@ const TableCategory = () => {
                               data-modal-toggle="user-modal"
                               onClick={() => {
                                 setOpenModelUpdate(true),
-                                callApiCategoryById(item._id);
+                                  callApiCategoryById(item._id);
                               }}
                               className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm inline-flex items-center px-3 py-2 text-center"
                             >

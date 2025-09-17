@@ -45,7 +45,7 @@ declare global {
       name: string;
     };
     avatar: string;
-    id: string;
+    _id: string;
   }
   interface IUserTable {
     email: string;

@@ -77,6 +77,10 @@ export const getAllCourse = async (query: string) => {
   await new Promise((r) => setTimeout(r, 1000));
   return axios.get<IModelPaginate<ICourseTable>>(`/courses${query}`);
 };
+export const getAllCourseByUserId = async (id: string, query: string) => {
+  await new Promise((r) => setTimeout(r, 1000));
+  return axios.get<IModelPaginate<ICourseTable>>(`/courses/user/${id}${query}`);
+};
 export const getByCourseId = async (id: string) => {
   return axios.get<IBackendRes<ICourseTable>>(`/courses/${id}`);
 };

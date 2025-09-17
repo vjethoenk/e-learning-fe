@@ -306,20 +306,20 @@ const LayoutAdmin = () => {
                     }`}
                   >
                     <li>
-                      <a
-                        href="#"
+                      <Link
+                        to={"admin/module"}
                         className="block px-8 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
                       >
-                        Contents
-                      </a>
+                        Modules
+                      </Link>
                     </li>
                     <li>
-                      <a
-                        href="#"
+                      <Link
+                        to={"admin/lesson"}
                         className="block px-8 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
                       >
                         Lessons
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </li>

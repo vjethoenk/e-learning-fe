@@ -5,11 +5,17 @@ import { useEffect, useState } from "react";
 
 import CreateCourse from "./create.course";
 import UpdateCourse from "./update.course";
-import { getAllCourse, getByCourseId } from "@/services/api";
+import {
+  getAllCourse,
+  getAllCourseByUserId,
+  getByCourseId,
+} from "@/services/api";
 import DeleteCourse from "./delete.course";
 import DetailCourse from "./detail.course";
+import { useCurrentApp } from "@/components/context/app.context";
 
 const TableCourse = () => {
+  const { user } = useCurrentApp();
   const [course, setCourse] = useState<ICourseTable[]>([]);
   const [dataCourse, setDataCourse] = useState<ICourseTable | null>(null);
   const [openModelCreate, setOpenModelCreate] = useState<boolean>(false);
@@ -34,14 +40,17 @@ const TableCourse = () => {
   const fetchData = async () => {
     try {
       const { current, pageSize, sort, name } = queryParams;
-      console.log("Name", name);
+
       let query = `?current=${current}&pageSize=${pageSize}&sort=${sort}`;
       if (name) query += `&title=/${name}/i`;
 
-      const res = await getAllCourse(query);
+      let res;
+      if (user?.role.name === "INSTRUCTOR") {
+        res = await getAllCourseByUserId(user?._id as string, query);
+      } else {
+        res = await getAllCourse(query);
+      }
       if (res?.data?.result) {
-        console.log("Result:", res.data.result);
-        console.log("Meta:", res.data.meta);
         setCourse(res.data.result);
         setMeta(res.data.meta);
       }
@@ -52,9 +61,15 @@ const TableCourse = () => {
   useEffect(() => {
     fetchData();
   }, [queryParams]);
+
   const reloadTable = async () => {
     const query = `?current=1&pageSize=6&sort=-createdAt`;
-    const res = await getAllCourse(query);
+    let res;
+    if (user?.role.name === "INSTRUCTOR") {
+      res = await getAllCourseByUserId(user?._id as string, query);
+    } else {
+      res = await getAllCourse(query);
+    }
     if (res && res.data.result) {
       setCourse(res.data.result);
     }
