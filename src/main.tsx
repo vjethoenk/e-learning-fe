@@ -17,6 +17,7 @@ import { ToastContainer } from "react-toastify";
 import Category from "./pages/admin/category";
 import Course from "./pages/admin/course";
 import Chapter from "./pages/admin/chapter";
+import Lesson from "./pages/admin/lesson";
 
 const router = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
       {
         path: "/admin/chapter",
         element: <Chapter></Chapter>,
+      },
+      {
+        path: "/admin/lesson",
+        element: <Lesson></Lesson>,
       },
     ],
   },

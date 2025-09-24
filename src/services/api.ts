@@ -1,6 +1,7 @@
 import type { ICreateCategory } from "@/components/admin/category/create.category";
 import type { ICreateChapter } from "@/components/admin/chapter/create.chapter";
 import type { ICreateCourse } from "@/components/admin/courses/create.course";
+import type { ICreateLesson } from "@/components/admin/lessons/create.lesson";
 import axios from "services/axios.customize";
 export const callLogin = async (username: string, password: string) => {
   await new Promise((r) => setTimeout(r, 1000));
@@ -113,9 +114,19 @@ export const getByChapterId = async (id: string) => {
   return axios.get(`/sections/${id}`);
 };
 export const deleteChapter = async (id: string) => {
-  return axios.delete<IBackendRes<IChapterTable>>(`sections/${id}`);
+  return axios.delete<IBackendRes<IChapterTable>>(`/sections/${id}`);
 };
 //End Chapter
+
+//Api Lesson
+export const createLesson = async (data: ICreateLesson) => {
+  return axios.post(`/lessons`, data);
+};
+export const getAllApiLesson = async (id: string, query: string) => {
+  await new Promise((r) => setTimeout(r, 2000));
+  return axios.get<IModelPaginate<ILessonTable>>(`/lessons/${id}${query}`);
+};
+//End
 
 //UploadFile
 export const uploadFile = async (file: File) => {
@@ -131,7 +142,36 @@ export const uploadFile = async (file: File) => {
 
   return res.data;
 };
+export const uploadFileLesson = async (file: File) => {
+  const formData = new FormData();
+  formData.append("fileUpload", file);
+
+  const res = await axios.post("/files/upload", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      folder_type: "lesson",
+    },
+  });
+
+  return res.data;
+};
 //End Upload
+
+// upload video to YouTube
+export const uploadYoutubeVideo = async (
+  file: File,
+  data: { title: string; description: string; userId: string }
+) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("title", data.title);
+  formData.append("description", data.description);
+  formData.append("userId", data.userId);
+  const res = await axios.post(`/youtube/upload`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res.data;
+};
 
 //Role api
 export const getByRoleId = async (id: string) => {

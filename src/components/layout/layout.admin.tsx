@@ -284,7 +284,7 @@ const LayoutAdmin = () => {
                     </span>
                     <svg
                       className={`w-4 h-4 ml-auto transition-transform duration-300 ${
-                        open ? "rotate-90" : ""
+                        openContent ? "rotate-90" : ""
                       }`}
                       fill="none"
                       stroke="currentColor"

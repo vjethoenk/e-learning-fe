@@ -83,15 +83,11 @@ const CreateCourse = (props: IProps) => {
   ) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      //   const url = URL.createObjectURL(file);
-
-      //   setFormData((prev) => ({ ...prev, thumbnail: url }));
       try {
         const res = await uploadFile(file);
         if (res) {
           setFormData((prev) => ({ ...prev, thumbnail: res.fileName }));
         }
-        console.log("Uploaded:", res.fileName);
       } catch (error) {
         console.log("Upload failed", error);
       }
@@ -127,7 +123,7 @@ const CreateCourse = (props: IProps) => {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-10">
+          <form onSubmit={handleSubmit} className="space-y-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-[-20px]">
               <div>
                 <label className="block mb-1 font-medium text-gray-700">
@@ -180,8 +176,8 @@ const CreateCourse = (props: IProps) => {
               />
             </div>
 
-            <div>
-              <label className="block mb-2 font-medium text-gray-700">
+            <div className="">
+              <label className="block mb-2 font-medium  text-gray-700">
                 Description
               </label>
               <Editor

@@ -109,4 +109,22 @@ declare global {
     };
     isDeleted: false;
   }
+  interface ILessonTable {
+    _id: string;
+    title: string;
+    description: string;
+    sectionId: {
+      _id: string;
+      title: string;
+    };
+    videoId: string;
+    thumbnail: string;
+    duration: number;
+    order: number;
+    createBy: {
+      _id: string;
+      email: string;
+    };
+    isDeleted: boolean;
+  }
 }
