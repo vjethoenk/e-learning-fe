@@ -124,7 +124,19 @@ export const createLesson = async (data: ICreateLesson) => {
 };
 export const getAllApiLesson = async (id: string, query: string) => {
   await new Promise((r) => setTimeout(r, 2000));
-  return axios.get<IModelPaginate<ILessonTable>>(`/lessons/${id}${query}`);
+  return axios.get<IModelPaginate<ILessonTable>>(
+    `/lessons/sectionId/${id}${query}`
+  );
+};
+export const getByLessonId = async (id: string) => {
+  return axios.get(`/lessons/${id}`);
+};
+export const updateLesson = async (id: string, data: ICreateLesson) => {
+  await new Promise((r) => setTimeout(r, 2000));
+  return axios.put<IBackendRes<ICreateLesson>>(`/lessons/${id}`, data);
+};
+export const deleteLesson = async (id: string) => {
+  return axios.delete<IBackendRes<ILessonTable>>(`/lessons/${id}`);
 };
 //End
 

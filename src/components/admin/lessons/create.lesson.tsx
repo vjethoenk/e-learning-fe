@@ -45,13 +45,8 @@ const defaultFormData: ICreateLesson = {
 
 const CreateLesson = (props: IProps) => {
   const { user } = useCurrentApp();
-  const {
-    openModelCreate,
-    setOpenModelCreate,
-    reloadTable,
-    selectedChapter,
-    setSelectedChapter,
-  } = props;
+  const { openModelCreate, setOpenModelCreate, reloadTable, selectedChapter } =
+    props;
 
   const [formData, setFormData] = useState<ICreateLesson>(defaultFormData);
   const [videoFile, setVideoFile] = useState<File | null>(null);
@@ -61,7 +56,6 @@ const CreateLesson = (props: IProps) => {
     setFormData(defaultFormData);
     setVideoFile(null);
     setLoading(false);
-    setSelectedChapter(null);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -171,7 +165,9 @@ const CreateLesson = (props: IProps) => {
               Add Lesson
             </DialogTitle>
             <button
-              onClick={() => setOpenModelCreate(false)}
+              onClick={() => {
+                setOpenModelCreate(false), resetForm();
+              }}
               className="p-2 rounded-full text-gray-500 hover:bg-gray-100"
             >
               ✕

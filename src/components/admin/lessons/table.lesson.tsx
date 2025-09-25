@@ -3,18 +3,29 @@ import {
   getAllApiLesson,
   getAllChapter,
   getAllCourseByUserId,
+  getByLessonId,
 } from "@/services/api";
 import { Listbox } from "@headlessui/react";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
 import { useEffect, useState } from "react";
 import CreateLesson from "./create.lesson";
+import DeleteLesson from "./delete.lesson";
+import UpdateLesson from "./update.lesson";
+import Pagination from "@/common/Pagination";
+import DetailLesson from "./detail.lesson";
 
 const TableLesson = () => {
   const [queryParams, setQueryParams] = useState({
     current: 1,
-    pageSize: 6,
-    sort: "-createdAt",
+    pageSize: 1,
+    sort: "order",
   });
+  const [meta, setMeta] = useState<{
+    current: number;
+    pageSize: number;
+    pages: number;
+    total: number;
+  } | null>(null);
   const { user } = useCurrentApp();
   const [course, setCourse] = useState<ICourseTable[]>([]);
   const [selectedCourse, setSelectedCourse] = useState<ICourseTable | null>(
@@ -29,6 +40,11 @@ const TableLesson = () => {
   const [openModelUpdate, setOpenModelUpdate] = useState<boolean>(false);
   const [openModelDelete, setOpenModelDelete] = useState<boolean>(false);
   const [openModelDetail, setOpenModelDetail] = useState<boolean>(false);
+
+  const [idDelete, setIdDelete] = useState("");
+  const [selectedLesson, setSelectedLesson] = useState<ILessonTable | null>(
+    null
+  );
 
   const [loading, setLoading] = useState(false);
 
@@ -51,15 +67,33 @@ const TableLesson = () => {
     const res = await getAllApiLesson(id, query);
     if (res.data) {
       setLesson(res.data.result);
-      setLoading(true);
+      setMeta(res.data.meta);
     }
+    setLoading(true);
   };
   useEffect(() => {
     setLoading(true);
     fetchDataCourse();
-  }, []);
+    if (selectedChapter?._id) {
+      fetchDataLesson(selectedChapter._id);
+    }
+  }, [queryParams, selectedChapter]);
 
-  const reloadTable = () => {};
+  const reloadTable = async () => {
+    const query = `?current=1&pageSize=1&sort=order`;
+    setLoading(false);
+    const res = await getAllApiLesson(selectedChapter?._id as string, query);
+    if (res.data) {
+      setLesson(res.data.result);
+      setLoading(true);
+    }
+  };
+  const callApiLessonById = async (id: string) => {
+    const res = await getByLessonId(id);
+    if (res.data) {
+      setSelectedLesson(res.data);
+    }
+  };
   return (
     <>
       {" "}
@@ -275,7 +309,7 @@ const TableLesson = () => {
                   <div
                     className="relative flex justify-center mb-3"
                     onClick={() => {
-                      //         setOpenModelDetail(true), callApiCourseById(item._id);
+                      setOpenModelDetail(true), callApiLessonById(item._id);
                     }}
                   >
                     <img
@@ -297,10 +331,10 @@ const TableLesson = () => {
                   {/* Action buttons */}
                   <div className="flex space-x-2 mt-4">
                     <button
-                      // onClick={() => {
-                      //   setOpenModelUpdate(true);
-                      //   callApiCourseById(item._id);
-                      // }}
+                      onClick={() => {
+                        setOpenModelUpdate(true);
+                        callApiLessonById(item._id);
+                      }}
                       className="flex items-center px-3 py-2 text-sm font-medium text-white bg-cyan-600 rounded-lg hover:bg-cyan-700"
                     >
                       <svg
@@ -319,8 +353,8 @@ const TableLesson = () => {
                     </button>
                     <button
                       onClick={() => {
-                        // setOpenModelDelete(true);
-                        // setIdDelete(item._id);
+                        setOpenModelDelete(true);
+                        setIdDelete(item._id);
                       }}
                       className="flex items-center px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700"
                     >
@@ -340,6 +374,18 @@ const TableLesson = () => {
                   </div>
                 </div>
               ) : null
+            )}
+          </div>
+          <div className="bg-white sticky sm:flex items-center w-full sm:justify-between bottom-0 right-0 border-t border-gray-200 p-4">
+            {meta ? (
+              <Pagination
+                meta={meta}
+                onPageChange={(page) => {
+                  setQueryParams((prev) => ({ ...prev, current: page }));
+                }}
+              />
+            ) : (
+              <></>
             )}
           </div>
         </>
@@ -376,6 +422,24 @@ const TableLesson = () => {
         selectedChapter={selectedChapter}
         setSelectedChapter={setSelectedChapter}
       ></CreateLesson>
+      <UpdateLesson
+        openModelUpdate={openModelUpdate}
+        setOpenModelUpdate={setOpenModelUpdate}
+        reloadTable={reloadTable}
+        selectedLesson={selectedLesson}
+      ></UpdateLesson>
+      <DeleteLesson
+        openModelDelete={openModelDelete}
+        setOpenModelDelete={setOpenModelDelete}
+        reloadTable={reloadTable}
+        idDelete={idDelete}
+        setIdDelete={setIdDelete}
+      ></DeleteLesson>
+      <DetailLesson
+        openModelDetail={openModelDetail}
+        setOpenModelDetail={setOpenModelDetail}
+        selectedLesson={selectedLesson}
+      ></DetailLesson>
     </>
   );
 };
