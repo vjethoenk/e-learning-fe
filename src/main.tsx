@@ -18,6 +18,7 @@ import Category from "./pages/admin/category";
 import Course from "./pages/admin/course";
 import Chapter from "./pages/admin/chapter";
 import Lesson from "./pages/admin/lesson";
+import CoursePage from "./pages/client/courses/CoursePage";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <HomePage></HomePage>,
+      },
+      {
+        path: "/courses",
+        element: <CoursePage></CoursePage>,
       },
     ],
   },

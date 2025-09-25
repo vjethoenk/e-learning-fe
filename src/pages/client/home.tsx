@@ -1,10 +1,18 @@
-import banner from "@/assets/banner.png";
+import Banner from "./banner";
+import PopularCategories from "./categories/PopularCategories";
+import FeaturedCourses from "./courses/FeaturedCourses";
+import Features from "./features";
+import CallToAction from "./review/callAction";
+import SuccessStories from "./review/stories";
 const HomePage = () => {
   return (
     <div>
-      <section className="container ">
-        <img src={banner} className="w-full h-auto object-cover" />
-      </section>
+      <Banner></Banner>
+      <Features></Features>
+      <FeaturedCourses></FeaturedCourses>
+      <PopularCategories></PopularCategories>
+      <SuccessStories></SuccessStories>
+      <CallToAction></CallToAction>
     </div>
   );
 };

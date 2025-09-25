@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import logo from "@/assets/el.png";
 import { useCurrentApp } from "../context/app.context";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { callLogout } from "@/services/api";
 
 const AppHeader: React.FC = () => {
@@ -10,6 +9,14 @@ const AppHeader: React.FC = () => {
 
   const [openUserMenu, setOpenUserMenu] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
+
+  const menuItems = [
+    { to: "/", label: "Trang chủ" },
+    { to: "/courses", label: "Các khóa học" },
+    { to: "/categories", label: "Thể loại" },
+    { to: "/posts", label: "Bài viết" },
+    { to: "/contact", label: "Liên hệ" },
+  ];
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -35,117 +42,94 @@ const AppHeader: React.FC = () => {
   };
 
   return (
-    <header className="w-full shadow-sm bg-white relative">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4 container">
+    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-sm">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
         {/* Logo */}
-        <div className="flex items-center justify-center space-x-2">
-          <img src={logo} alt="Logo" className="h-10 w-11" />
-          <span className="font-bold text-xl text-gray-900">
-            F4 <span className="text-red-600">FullStack</span>
+        <div className="flex items-center space-x-3">
+          <div className="bg-blue-600 text-white p-2 rounded-xl shadow-sm">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-5 h-5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"
+              />
+            </svg>
+          </div>
+
+          <span className="text-2xl font-extrabold tracking-wide">
+            <span className="text-blue-600">F4</span>
+            <span className="bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 bg-clip-text text-transparent ml-1">
+              FullStack
+            </span>
           </span>
         </div>
 
-        {/* Menu */}
-        <nav className="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-700 relative">
-          {/* Dropdown */}
-          <div className="relative group">
-            <button className="hover:text-red-500 flex items-center space-x-1 focus:outline-none">
-              <span>Chương trình học</span>
-              <svg
-                className="w-4 h-4 transform group-hover:rotate-180 transition"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </button>
-
-            {/* Submenu */}
-            <div className="absolute left-0 mt-2 w-48 bg-white border rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-200 z-50">
-              <a
-                href="#"
-                className="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-red-600"
-              >
-                Lập trình Web
-              </a>
-              <a
-                href="#"
-                className="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-red-600"
-              >
-                Lập trình Mobile
-              </a>
-              <a
-                href="#"
-                className="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-red-600"
-              >
-                Khoa học dữ liệu
-              </a>
-            </div>
-          </div>
-
-          <a href="#" className="hover:text-red-500">
-            Giảng viên
-          </a>
-          <a href="#" className="hover:text-red-500">
-            Tin tức
-          </a>
-          <a href="#" className="hover:text-red-500">
-            Sự kiện
-          </a>
-          <a href="#" className="hover:text-red-500">
-            Về chúng tôi
-          </a>
+        {/* Nav */}
+        <nav className="hidden md:flex items-center space-x-6 font-medium">
+          {menuItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              className={({ isActive }) =>
+                `px-4 py-2 rounded-lg transition ${
+                  isActive
+                    ? "bg-blue-50 text-blue-600"
+                    : "text-gray-700 hover:bg-blue-100 hover:text-blue-600"
+                }`
+              }
+            >
+              {item.label}
+            </NavLink>
+          ))}
         </nav>
-
-        {/* Auth Buttons */}
+        {/* User / Auth */}
         {isAuthenticated ? (
           <div className="relative" ref={userMenuRef}>
             <button
               onClick={() => setOpenUserMenu(!openUserMenu)}
-              className="hover:text-red-500 flex items-center space-x-3 focus:outline-none"
+              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium shadow-sm hover:bg-blue-700 transition"
             >
-              <div className="flex px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 transition space-x-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-5"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-                  />
-                </svg>
-                <span>{user?.name || "Tài khoản"}</span>
-              </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                />
+              </svg>
+              <span>{user?.name || "Tài khoản"}</span>
             </button>
 
             {openUserMenu && (
-              <div className="absolute top-full left-0 mt-2 w-36 bg-white border rounded-lg shadow-lg transition duration-200 z-50">
+              <div className="absolute right-0 mt-2 w-44 bg-white border rounded-xl shadow-lg overflow-hidden animate-fadeIn z-50">
                 <Link
                   to={"/admin"}
-                  className="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-red-600"
+                  className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
                 >
                   Trang quản lý
                 </Link>
                 <a
                   href="#"
-                  className="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-red-600"
+                  className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
                 >
                   Khóa học của bạn
                 </a>
                 <button
                   onClick={logout}
-                  className="w-full text-left block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-red-600"
+                  className="w-full text-left block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
                 >
                   Đăng xuất
                 </button>
@@ -153,17 +137,19 @@ const AppHeader: React.FC = () => {
             )}
           </div>
         ) : (
-          <div className="flex items-center space-x-4">
-            <button className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 transition">
-              <Link to={"/login"} style={{ color: "#494949ff" }}>
-                Đăng nhập
-              </Link>
-            </button>
-            <button className="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 transition">
-              <Link to={"/register"} style={{ color: "#ffffffff" }}>
-                Đăng ký
-              </Link>
-            </button>
+          <div className="flex items-center space-x-3">
+            <Link
+              to={"/login"}
+              className="text-gray-700 font-medium hover:text-blue-600 transition"
+            >
+              Đăng nhập
+            </Link>
+            <Link
+              to={"/register"}
+              className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold shadow-sm hover:bg-blue-700 transition"
+            >
+              Đăng ký
+            </Link>
           </div>
         )}
       </div>

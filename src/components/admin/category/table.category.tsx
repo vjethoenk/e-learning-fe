@@ -22,7 +22,7 @@ const TableCategory = () => {
 
   const [queryParams, setQueryParams] = useState({
     current: 1,
-    pageSize: 5,
+    pageSize: 6,
     sort: "-createdAt",
     name: "",
   });
@@ -45,7 +45,7 @@ const TableCategory = () => {
     fetchData();
   }, [queryParams]);
   const reloadTable = async () => {
-    const query = `?current=1&pageSize=5&sort=-createdAt`;
+    const query = `?current=1&pageSize=6&sort=-createdAt`;
     const res = await getAllCategory(query);
     if (res && res.data.result) {
       setCategory(res.data.result);
@@ -132,7 +132,7 @@ const TableCategory = () => {
           </div>
           <div className="sm:flex">
             <SearchBox
-              placeholder="Search for users"
+              placeholder="Search for category"
               onSearch={(value) => {
                 console.log("Search value:", value);
                 setQueryParams((prev) => ({
@@ -168,155 +168,98 @@ const TableCategory = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col ">
-        <div className="overflow-x-auto">
-          <div className="align-middle inline-block min-w-full">
-            <div className="shadow overflow-hidden">
-              <table className="table-fixed min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-100">
-                  <tr>
-                    <th scope="col" className="p-4">
-                      <div className="flex items-center">
-                        <input
-                          id="checkbox-all"
-                          aria-describedby="checkbox-1"
-                          type="checkbox"
-                          className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded"
-                        />
-                        <label htmlFor="checkbox-all" className="sr-only">
-                          checkbox
-                        </label>
-                      </div>
-                    </th>
-                    <th
-                      scope="col"
-                      className="p-4 text-left text-xs font-medium text-gray-500 uppercase"
-                    >
-                      Id
-                    </th>
-                    <th
-                      scope="col"
-                      className="p-4 text-left text-xs font-medium text-gray-500 uppercase"
-                    >
-                      Name
-                    </th>
-                    <th
-                      scope="col"
-                      className="p-4 text-left text-xs font-medium text-gray-500 uppercase"
-                    >
-                      Create By
-                    </th>
-                    <th
-                      scope="col"
-                      className="p-4 text-left text-xs font-medium text-gray-500 uppercase"
-                    >
-                      Created At
-                    </th>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 mb-8">
+        {category.map((item: any) =>
+          item.isDeleted === false ? (
+            <div
+              key={item._id}
+              className="bg-white shadow rounded-xl p-4 hover:shadow-lg transition duration-200 cursor-pointer"
+            >
+              {/* Thumbnail */}
+              <div
+                className="relative flex justify-center mb-3"
+                onClick={() => {
+                  callApiCategoryById(item._id);
+                }}
+              >
+                <img
+                  className="h-[250px] w-full object-cover rounded-lg"
+                  src={
+                    import.meta.env.VITE_BACKEND_URL +
+                    "/images/category/" +
+                    item.thumbnail
+                  }
+                />
 
-                    <th scope="col" className="p-4"></th>
-                  </tr>
-                </thead>
-                {category.map((item: any) => (
-                  <>
-                    {item.isDeleted === false ? (
-                      <tbody className="bg-white divide-y divide-gray-200">
-                        <tr className="hover:bg-gray-100">
-                          <td className="p-4 w-4">
-                            <div className="flex items-center">
-                              <input
-                                id="checkbox-{{ .id }}"
-                                aria-describedby="checkbox-1"
-                                type="checkbox"
-                                className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded"
-                              />
-                              <label
-                                htmlFor="checkbox-{{ .id }}"
-                                className="sr-only"
-                              >
-                                checkbox
-                              </label>
-                            </div>
-                          </td>
-                          <td className="p-4 whitespace-nowrap text-base font-semibold text-gray-900 ">
-                            <div className="ml-1 text-[#0a83f3] font-medium cursor-pointer">
-                              {item._id}
-                            </div>
-                          </td>
+                <div
+                  className={`absolute top-2 left-2 bg-[${item.color}] text-white text-xs font-semibold px-2 py-1 rounded-md shadow`}
+                >
+                  <div
+                    className="w-6 h-6"
+                    dangerouslySetInnerHTML={{ __html: item.icon }}
+                  />
+                </div>
+              </div>
 
-                          <td className="p-4 whitespace-nowrap text-base font-semibold text-gray-900 ">
-                            <div className="ml-1">{item.name}</div>
-                          </td>
-                          <td className="p-4 whitespace-nowrap text-base font-semibold text-gray-900">
-                            {item.createBy.email}
-                          </td>
-                          <td className="p-4 whitespace-nowrap text-base font-semibold text-gray-900">
-                            {new Date(item.createdAt).toLocaleDateString(
-                              "vi-VN"
-                            )}
-                          </td>
+              <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                {item.name}
+              </h3>
 
-                          <td className="p-4 whitespace-nowrap space-x-2">
-                            <button
-                              type="button"
-                              data-modal-toggle="user-modal"
-                              onClick={() => {
-                                setOpenModelUpdate(true),
-                                  callApiCategoryById(item._id);
-                              }}
-                              className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm inline-flex items-center px-3 py-2 text-center"
-                            >
-                              <svg
-                                className="mr-2 h-5 w-5"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path>
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-                                  clip-rule="evenodd"
-                                ></path>
-                              </svg>
-                              Edit
-                            </button>
-                            <button
-                              type="button"
-                              data-modal-toggle="delete-user-modal"
-                              onClick={() => {
-                                setOpenModelDelete(true);
-                                setIdDelete(item._id);
-                              }}
-                              className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-3 py-2 text-center"
-                            >
-                              <svg
-                                className="mr-2 h-5 w-5"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                  clip-rule="evenodd"
-                                ></path>
-                              </svg>
-                              Delete
-                            </button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    ) : (
-                      <div></div>
-                    )}
-                  </>
-                ))}
-              </table>
+              <p className="text-base text-cyan-600 mb-3">
+                {item.description.length > 100
+                  ? item.description.substring(0, 100) + "..."
+                  : item.description}
+              </p>
+
+              {/* Action buttons */}
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => {
+                    setOpenModelUpdate(true);
+                    callApiCategoryById(item._id);
+                  }}
+                  className="flex items-center px-3 py-2 text-sm font-medium text-white bg-cyan-600 rounded-lg hover:bg-cyan-700"
+                >
+                  <svg
+                    className="mr-2 h-5 w-5"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path>
+                    <path
+                      fillRule="evenodd"
+                      d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
+                      clipRule="evenodd"
+                    ></path>
+                  </svg>
+                  Edit
+                </button>
+                <button
+                  onClick={() => {
+                    setOpenModelDelete(true);
+                    setIdDelete(item._id);
+                  }}
+                  className="flex items-center px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700"
+                >
+                  <svg
+                    className="mr-2 h-5 w-5"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                      clipRule="evenodd"
+                    ></path>
+                  </svg>
+                  Delete
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
+          ) : null
+        )}
       </div>
-      <div className="bg-white sticky sm:flex items-center w-full sm:justify-between bottom-0 right-0 border-t border-gray-200 p-4">
+      <div className="bg-white  sm:flex items-center w-full sm:justify-between bottom-0 right-0 border-t border-gray-200 p-4">
         {meta ? (
           <Pagination
             meta={meta}

@@ -79,6 +79,10 @@ declare global {
   interface ICategoryTable {
     _id: string;
     name: string;
+    thumbnail: string;
+    description: string;
+    color: string;
+    icon: string;
     createBy: {
       _id: string;
       email: string;

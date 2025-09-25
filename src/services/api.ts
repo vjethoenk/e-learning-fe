@@ -167,6 +167,19 @@ export const uploadFileLesson = async (file: File) => {
 
   return res.data;
 };
+export const uploadFileCategory = async (file: File) => {
+  const formData = new FormData();
+  formData.append("fileUpload", file);
+
+  const res = await axios.post("/files/upload", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      folder_type: "category",
+    },
+  });
+
+  return res.data;
+};
 //End Upload
 
 // upload video to YouTube
