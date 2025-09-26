@@ -1,7 +1,7 @@
 import Banner from "./banner";
-import PopularCategories from "./categories/PopularCategories";
-import FeaturedCourses from "./courses/FeaturedCourses";
-import Features from "./features";
+import PopularCategories from "../../components/client/categories/home.category";
+import FeaturedCourses from "../../components/client/courses/home.course";
+import Features from "./review/features";
 import CallToAction from "./review/callAction";
 import SuccessStories from "./review/stories";
 const HomePage = () => {

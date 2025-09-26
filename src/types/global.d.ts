@@ -101,6 +101,7 @@ declare global {
       email: string;
       name: string;
     };
+    createdAt: date;
   }
   interface IChapterTable {
     _id: string;

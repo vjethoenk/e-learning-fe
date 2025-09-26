@@ -13,7 +13,7 @@ const AppHeader: React.FC = () => {
   const menuItems = [
     { to: "/", label: "Trang chủ" },
     { to: "/courses", label: "Các khóa học" },
-    { to: "/categories", label: "Thể loại" },
+    { to: "/category", label: "Thể loại" },
     { to: "/posts", label: "Bài viết" },
     { to: "/contact", label: "Liên hệ" },
   ];

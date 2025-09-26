@@ -1,42 +1,19 @@
-import { ClockIcon, UserGroupIcon, StarIcon } from "@heroicons/react/24/solid";
-
-const courses = [
-  {
-    id: 1,
-    title: "React & Node.js Full-Stack",
-    level: "Trung cấp",
-    price: "299 đô la",
-    duration: "12 tuần",
-    students: "2.847",
-    rating: "4.9",
-    image:
-      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-  },
-  {
-    id: 2,
-    title: "Thành thạo Python Django",
-    level: "Người mới bắt đầu",
-    price: "249 đô la",
-    duration: "10 tuần",
-    students: "1.923",
-    rating: "4.8",
-    image:
-      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-  },
-  {
-    id: 3,
-    title: "Vue.js & Express Hoàn thành",
-    level: "Trình độ cao",
-    price: "349 đô la",
-    duration: "14 tuần",
-    students: "1.456",
-    rating: "4.9",
-    image:
-      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-  },
-];
+import { getAllCourse } from "@/services/api";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function FeaturedCourses() {
+  const [course, setCourse] = useState<ICourseTable[]>([]);
+  useEffect(() => {
+    const fetchDataCourse = async () => {
+      const query = "?current=1&pageSize==3";
+      const res = await getAllCourse(query);
+      if (res.data) {
+        setCourse(res.data.result);
+      }
+    };
+    fetchDataCourse();
+  }, []);
   return (
     <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -53,23 +30,27 @@ export default function FeaturedCourses() {
 
         {/* Courses */}
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {courses.map((course) => (
+          {course.map((course) => (
             <div
-              key={course.id}
+              key={course._id}
               className="bg-white rounded-2xl shadow hover:shadow-lg transition p-4 flex flex-col"
             >
               <img
-                src={course.image}
+                src={
+                  import.meta.env.VITE_BACKEND_URL +
+                  "/images/course/" +
+                  course.thumbnail
+                }
                 alt={course.title}
                 className="rounded-xl object-cover h-48 w-full"
               />
 
               <div className="flex justify-between items-center mt-4">
-                <span className="text-sm px-3 py-1 bg-indigo-100 text-indigo-600 rounded-full">
-                  {course.level}
-                </span>
                 <span className="text-lg font-semibold text-indigo-600">
-                  {course.price}
+                  {new Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(course.price)}
                 </span>
               </div>
 
@@ -79,27 +60,38 @@ export default function FeaturedCourses() {
 
               <div className="mt-2 flex items-center gap-4 text-sm text-gray-500">
                 <span className="flex items-center gap-1">
-                  <ClockIcon className="w-4 h-4" /> {course.duration}
-                </span>
-                <span className="flex items-center gap-1">
-                  <UserGroupIcon className="w-4 h-4" /> {course.students}
-                </span>
-                <span className="flex items-center gap-1">
-                  <StarIcon className="w-4 h-4 text-yellow-500" />{" "}
-                  {course.rating}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="size-4"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>{" "}
+                  {course.createBy.name}
                 </span>
               </div>
 
-              <button className="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+              <Link
+                to={`/courses/${course._id}`}
+                className="mt-6 w-full bg-blue-600 text-white text-center py-2 rounded-lg hover:bg-blue-700 transition"
+              >
                 Đăng ký ngay
-              </button>
+              </Link>
             </div>
           ))}
         </div>
 
         {/* Xem tất cả */}
         <div className="text-center mt-12 flex justify-center">
-          <a className="text-blue-600 rounded-lg hover:text-blue-800 transition flex justify-center items-center gap-1 cursor-pointer">
+          <Link
+            to={"/courses"}
+            className="text-blue-600 rounded-lg hover:text-blue-800 transition flex justify-center items-center gap-1 cursor-pointer"
+          >
             Xem tất cả các khóa học{" "}
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -115,7 +107,7 @@ export default function FeaturedCourses() {
                 d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
               />
             </svg>
-          </a>
+          </Link>
         </div>
       </div>
     </section>

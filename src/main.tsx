@@ -18,7 +18,9 @@ import Category from "./pages/admin/category";
 import Course from "./pages/admin/course";
 import Chapter from "./pages/admin/chapter";
 import Lesson from "./pages/admin/lesson";
-import CoursePage from "./pages/client/courses/CoursePage";
+import CategoryPage from "./pages/client/category";
+import CoursePage from "./pages/client/course";
+import CourseDetail from "./components/client/courses/detail.course";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +34,14 @@ const router = createBrowserRouter([
       {
         path: "/courses",
         element: <CoursePage></CoursePage>,
+      },
+      {
+        path: "/category",
+        element: <CategoryPage></CategoryPage>,
+      },
+      {
+        path: "/courses/:id",
+        element: <CourseDetail></CourseDetail>,
       },
     ],
   },
