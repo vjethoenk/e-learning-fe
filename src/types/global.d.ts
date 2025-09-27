@@ -38,7 +38,7 @@ declare global {
   }
   interface IUser {
     email: string;
-    phone: string;
+
     name: string;
     role: {
       _id: string;
@@ -58,6 +58,7 @@ declare global {
     gender: string;
     password: string;
     isDeleted: boolean;
+    address: string;
   }
   interface ICreateUser {
     name: string;

@@ -21,6 +21,9 @@ import Lesson from "./pages/admin/lesson";
 import CategoryPage from "./pages/client/category";
 import CoursePage from "./pages/client/course";
 import CourseDetail from "./components/client/courses/detail.course";
+import Checkout from "./pages/client/checkout";
+import PaymentSuccess from "./components/client/checkout/success.checkout";
+import PaymentFail from "./components/client/checkout/fail.checkout";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +45,23 @@ const router = createBrowserRouter([
       {
         path: "/courses/:id",
         element: <CourseDetail></CourseDetail>,
+      },
+      {
+        path: "/payment/success",
+        element: <PaymentSuccess></PaymentSuccess>,
+      },
+      {
+        path: "/payment/fail",
+        element: <PaymentFail></PaymentFail>,
+      },
+
+      {
+        path: "/checkout",
+        element: (
+          <ProtectedRoute>
+            <Checkout></Checkout>
+          </ProtectedRoute>
+        ),
       },
     ],
   },

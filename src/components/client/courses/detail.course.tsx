@@ -6,7 +6,7 @@ import {
   CheckCircleIcon,
 } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import avatar from "@/assets/avatar.jpg";
 
 export default function CourseDetail() {
@@ -23,20 +23,22 @@ export default function CourseDetail() {
     const fetchDataCourse = async () => {
       const res = await getByCourseId(id as string);
       if (res.data) {
-        console.log("reeeee", res.data);
         setCourse(res.data);
-      }
-      const cat = await getByCategoryId(course?.categoryId as string);
-      if (cat.data) {
-        setCategory(cat.data);
-      }
-      const chap = await getAllChapter(course?._id as string);
-      if (chap.data) {
-        setChapter(chap.data);
+
+        const cat = await getByCategoryId(res.data.categoryId as string);
+        if (cat.data) {
+          setCategory(cat.data);
+        }
+
+        const chap = await getAllChapter(res.data._id as string);
+        if (chap.data) {
+          setChapter(chap.data);
+        }
       }
     };
     fetchDataCourse();
   }, [id]);
+
   return (
     <div className="max-w-7xl mx-auto p-6">
       <div className="flex flex-col lg:flex-row gap-8">
@@ -93,17 +95,18 @@ export default function CourseDetail() {
                 }).format(course.price)
               : "N/A"}
 
-            {/* <span className="text-gray-400 text-lg line-through">
-              499 đô la
-            </span> */}
+            <span className="text-gray-400 text-lg line-through ml-2">
+              499.000 đ
+            </span>
           </div>
-          {/* <p className="text-green-600 text-sm font-medium mt-1">
+          <p className="text-green-600 text-sm font-medium mt-1">
             GIẢM GIÁ 40% trong thời gian có hạn
-          </p> */}
-
-          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg mt-4 font-medium">
-            Đăng ký ngay
-          </button>
+          </p>
+          <Link to={"/checkout"} state={{ course }}>
+            <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg mt-4 font-medium">
+              Đăng ký ngay
+            </button>
+          </Link>
           <p className="text-xs text-gray-500 text-center mt-2">
             Đảm bảo hoàn tiền trong 30 ngày
           </p>

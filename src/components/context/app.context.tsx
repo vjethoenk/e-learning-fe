@@ -26,7 +26,7 @@ const AppProvider = (props: IProps) => {
       if (res.data) {
         setUser(res.data.user);
         setIsAuthenticated(true);
-        console.log(user);
+        console.log("jjglkjdolfjldskgjlfd", res.data.user);
       }
       setIsAppLoading(false);
     };

@@ -205,3 +205,16 @@ export const getByRoleId = async (id: string) => {
 export const getAllRole = async () => {
   return axios.get<IBackendRes<IRole[]>>(`/role`);
 };
+
+//Payment
+export const createPayment = async (
+  userId: string,
+  courseId: string,
+  amount: number
+) => {
+  return await axios.post("/payment/create", {
+    userId,
+    courseId,
+    amount,
+  });
+};

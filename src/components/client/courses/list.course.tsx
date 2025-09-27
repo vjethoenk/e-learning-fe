@@ -7,6 +7,7 @@ import {
 import Dropdown from "@/common/Dropdown";
 import { getAllCourse } from "@/services/api";
 import PaginationPage from "@/common/PaginationPage";
+import { Link } from "react-router-dom";
 
 export default function CourseList() {
   const categoryOptions = [
@@ -161,9 +162,12 @@ export default function CourseList() {
               </span>
             </div>
 
-            <button className="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
-              Đăng ký ngay
-            </button>
+            <Link to={`/courses/${course._id}`}>
+              {" "}
+              <button className="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+                Đăng ký ngay
+              </button>
+            </Link>
           </div>
         ))}
       </div>
