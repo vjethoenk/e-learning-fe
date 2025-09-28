@@ -114,6 +114,7 @@ declare global {
       email: string;
     };
     isDeleted: false;
+    lessonCount?: number;
   }
   interface ILessonTable {
     _id: string;

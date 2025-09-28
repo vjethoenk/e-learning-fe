@@ -100,7 +100,7 @@ export const updateCourse = async (data: ICreateCourse, id: string) => {
 
 //APIs Chapter
 export const getAllChapter = async (id: string) => {
-  await new Promise((r) => setTimeout(r, 1000));
+  await new Promise((r) => setTimeout(r, 2000));
   return axios.get(`/sections/course/${id}`);
 };
 export const createChapter = async (data: ICreateChapter) => {
@@ -123,7 +123,7 @@ export const createLesson = async (data: ICreateLesson) => {
   return axios.post(`/lessons`, data);
 };
 export const getAllApiLesson = async (id: string, query: string) => {
-  await new Promise((r) => setTimeout(r, 2000));
+  //await new Promise((r) => setTimeout(r, 2000));
   return axios.get<IModelPaginate<ILessonTable>>(
     `/lessons/sectionId/${id}${query}`
   );
@@ -137,6 +137,9 @@ export const updateLesson = async (id: string, data: ICreateLesson) => {
 };
 export const deleteLesson = async (id: string) => {
   return axios.delete<IBackendRes<ILessonTable>>(`/lessons/${id}`);
+};
+export const getChapterLessonCount = async (id: string) => {
+  return axios.get(`/lessons/count/${id}`);
 };
 //End
 
@@ -217,4 +220,7 @@ export const createPayment = async (
     courseId,
     amount,
   });
+};
+export const checkCourse = async (user_id: string, course_id: string) => {
+  return axios.get(`enrollments/check?userId=${user_id}&courseId=${course_id}`);
 };

@@ -17,7 +17,7 @@ import DetailLesson from "./detail.lesson";
 const TableLesson = () => {
   const [queryParams, setQueryParams] = useState({
     current: 1,
-    pageSize: 1,
+    pageSize: 6,
     sort: "order",
   });
   const [meta, setMeta] = useState<{
@@ -80,7 +80,7 @@ const TableLesson = () => {
   }, [queryParams, selectedChapter]);
 
   const reloadTable = async () => {
-    const query = `?current=1&pageSize=1&sort=order`;
+    const query = `?current=1&pageSize=6&sort=order`;
     setLoading(false);
     const res = await getAllApiLesson(selectedChapter?._id as string, query);
     if (res.data) {

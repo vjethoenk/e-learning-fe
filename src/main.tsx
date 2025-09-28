@@ -24,6 +24,7 @@ import CourseDetail from "./components/client/courses/detail.course";
 import Checkout from "./pages/client/checkout";
 import PaymentSuccess from "./components/client/checkout/success.checkout";
 import PaymentFail from "./components/client/checkout/fail.checkout";
+import LessonPage from "./pages/client/lesson";
 
 const router = createBrowserRouter([
   {
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
             <Checkout></Checkout>
           </ProtectedRoute>
         ),
+      },
+      {
+        path: "/lesson/:id",
+        element: <LessonPage></LessonPage>,
       },
     ],
   },

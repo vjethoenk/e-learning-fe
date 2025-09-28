@@ -1,0 +1,108 @@
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  CheckCircleIcon,
+} from "@heroicons/react/24/outline";
+
+interface LessonSidebarProps {
+  chapter: IChapterTable[];
+  lesson: { [chapterId: string]: ILessonTable[] };
+  openChapters: { [id: string]: boolean };
+  toggleChapter: (chapterId: string) => void;
+  setCurrentLesson: (lesson: ILessonTable) => void;
+  selectedLessonId: string | null;
+  setSelectedLessonId: (id: string) => void;
+  formatDuration: (seconds: number) => string;
+  loading: boolean;
+}
+
+export default function LessonSidebar({
+  chapter,
+  lesson,
+  openChapters,
+  toggleChapter,
+  setCurrentLesson,
+  selectedLessonId,
+  setSelectedLessonId,
+  formatDuration,
+  loading,
+}: LessonSidebarProps) {
+  return (
+    <aside className="w-96 bg-white text-gray-900 border-l border-gray-200 flex flex-col">
+      <div className="p-4 border-b">
+        <h3 className="font-medium">Nội dung khóa học</h3>
+      </div>
+
+      <div className="flex-1 overflow-y-auto divide-y">
+        {loading ? (
+          <p className="p-4 text-gray-500 animate-pulse">
+            Đang tải chapters...
+          </p>
+        ) : (
+          chapter.map((chap) => (
+            <div key={chap._id} className="p-4">
+              <div
+                className="flex items-center justify-between cursor-pointer"
+                onClick={() => toggleChapter(chap._id)}
+              >
+                <p className="font-semibold">{chap.title}</p>
+                {openChapters[chap._id] ? (
+                  <ChevronDownIcon className="w-5 h-5 text-gray-400" />
+                ) : (
+                  <ChevronUpIcon className="w-5 h-5 text-gray-400" />
+                )}
+              </div>
+
+              {openChapters[chap._id] && lesson[chap._id] && (
+                <ul className="mt-2 space-y-2 text-sm">
+                  {lesson[chap._id].map((les) => (
+                    <li
+                      key={les._id}
+                      onClick={() => {
+                        setCurrentLesson(les);
+                        setSelectedLessonId(les._id);
+                      }}
+                      className={`cursor-pointer p-2 rounded-md flex items-center justify-between
+                        ${
+                          selectedLessonId === les._id
+                            ? "bg-green-100 text-green-600 font-semibold"
+                            : "bg-white text-gray-700 hover:bg-gray-50"
+                        }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <CheckCircleIcon className="w-4 h-4" />
+                        {les.title}
+                      </div>
+                      <span className="text-xs">
+                        {les?.duration ? formatDuration(les.duration) : "0:00"}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Chat Support */}
+      <div className="p-4 border-t">
+        <button className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="size-5"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5.337 21.718a6.707 6.707 0 0 1-.533-.074.75.75 0 0 1-.44-1.223 3.73 3.73 0 0 0 .814-1.686c.023-.115-.022-.317-.254-.543C3.274 16.587 2.25 14.41 2.25 12c0-5.03 4.428-9 9.75-9s9.75 3.97 9.75 9c0 5.03-4.428 9-9.75 9-.833 0-1.643-.097-2.417-.279a6.721 6.721 0 0 1-4.246.997Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          Nhắn tin trao đổi với
+        </button>
+      </div>
+    </aside>
+  );
+}

@@ -1,4 +1,9 @@
-import { getAllChapter, getByCategoryId, getByCourseId } from "@/services/api";
+import {
+  checkCourse,
+  getAllChapter,
+  getByCategoryId,
+  getByCourseId,
+} from "@/services/api";
 import { AcademicCapIcon, UserIcon } from "@heroicons/react/20/solid";
 import {
   StarIcon,
@@ -8,6 +13,7 @@ import {
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import avatar from "@/assets/avatar.jpg";
+import { useCurrentApp } from "@/components/context/app.context";
 
 export default function CourseDetail() {
   const [course, setCourse] = useState<ICourseTable | null>(null);
@@ -18,6 +24,8 @@ export default function CourseDetail() {
   const [curriculum, setCurriculum] = useState<boolean>(false);
   const [teacher, setTeacher] = useState<boolean>(false);
   const [review, setReview] = useState<boolean>(false);
+  const [isEnrolled, setIsEnrolled] = useState<boolean>(false);
+  const { user } = useCurrentApp();
 
   useEffect(() => {
     const fetchDataCourse = async () => {
@@ -33,6 +41,10 @@ export default function CourseDetail() {
         const chap = await getAllChapter(res.data._id as string);
         if (chap.data) {
           setChapter(chap.data);
+        }
+        const check = await checkCourse(user?._id as string, id as string);
+        if (check.data.isEnrolled === true) {
+          setIsEnrolled(true);
         }
       }
     };
@@ -102,11 +114,19 @@ export default function CourseDetail() {
           <p className="text-green-600 text-sm font-medium mt-1">
             GIẢM GIÁ 40% trong thời gian có hạn
           </p>
-          <Link to={"/checkout"} state={{ course }}>
-            <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg mt-4 font-medium">
-              Đăng ký ngay
-            </button>
-          </Link>
+          {isEnrolled === false ? (
+            <Link to={"/checkout"} state={{ course }}>
+              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg mt-4 font-medium">
+                Đăng ký ngay
+              </button>
+            </Link>
+          ) : (
+            <Link to={`/lesson/${course?._id}`} state={{ course }}>
+              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg mt-4 font-medium">
+                Vào học ngay
+              </button>
+            </Link>
+          )}
           <p className="text-xs text-gray-500 text-center mt-2">
             Đảm bảo hoàn tiền trong 30 ngày
           </p>
