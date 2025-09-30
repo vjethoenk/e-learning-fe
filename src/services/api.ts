@@ -80,7 +80,6 @@ export const getAllCourse = async (query: string) => {
   return axios.get<IModelPaginate<ICourseTable>>(`/courses${query}`);
 };
 export const getAllCourseByUserId = async (id: string, query: string) => {
-  await new Promise((r) => setTimeout(r, 1000));
   return axios.get<IModelPaginate<ICourseTable>>(`/courses/user/${id}${query}`);
 };
 export const getByCourseId = async (id: string) => {
@@ -100,7 +99,7 @@ export const updateCourse = async (data: ICreateCourse, id: string) => {
 
 //APIs Chapter
 export const getAllChapter = async (id: string) => {
-  await new Promise((r) => setTimeout(r, 2000));
+  // await new Promise((r) => setTimeout(r, 2000));
   return axios.get(`/sections/course/${id}`);
 };
 export const createChapter = async (data: ICreateChapter) => {
@@ -224,3 +223,26 @@ export const createPayment = async (
 export const checkCourse = async (user_id: string, course_id: string) => {
   return axios.get(`enrollments/check?userId=${user_id}&courseId=${course_id}`);
 };
+
+//Quiz Api
+export const getAllQuiz = async (id: string) => {
+  // await new Promise((r) => setTimeout(r, 2000));
+  return axios.get(`/quizzes/${id}`);
+};
+export const getAllQuestions = async (id: string) => {
+  await new Promise((r) => setTimeout(r, 2000));
+  return axios.get(`/quizzes/questions/${id}`);
+};
+export const createQuiz = async (id: string, data: {}) => {
+  return await axios.post(`/quizzes/${id}`, data);
+};
+export const createQuestions = async (id: string, data: any) => {
+  return await axios.post(`/quizzes/${id}/questions`, data);
+};
+export const createAnswers = async (id: string, data: {}) => {
+  return await axios.post(`/quizzes/questions/${id}/answers`, data);
+};
+export const getQuestionById = async (id: string) => {
+  return await axios.get(`/quizzes/ques/${id}`);
+};
+//end

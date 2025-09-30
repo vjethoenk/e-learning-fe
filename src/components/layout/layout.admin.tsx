@@ -321,6 +321,14 @@ const LayoutAdmin = () => {
                         Lessons
                       </Link>
                     </li>
+                    <li>
+                      <Link
+                        to={"/admin/quiz"}
+                        className="block px-8 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                      >
+                        Quiz
+                      </Link>
+                    </li>
                   </ul>
                 </li>
                 <li>

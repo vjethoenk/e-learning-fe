@@ -6,6 +6,7 @@ import {
 
 interface LessonSidebarProps {
   chapter: IChapterTable[];
+  quiz: { [chapterId: string]: IQuizTable[] };
   lesson: { [chapterId: string]: ILessonTable[] };
   openChapters: { [id: string]: boolean };
   toggleChapter: (chapterId: string) => void;
@@ -14,10 +15,13 @@ interface LessonSidebarProps {
   setSelectedLessonId: (id: string) => void;
   formatDuration: (seconds: number) => string;
   loading: boolean;
+  setOpenQuiz: (v: boolean) => void;
+  setSelectedQuiz: (v: IQuizTable) => void;
 }
 
 export default function LessonSidebar({
   chapter,
+  quiz,
   lesson,
   openChapters,
   toggleChapter,
@@ -26,6 +30,8 @@ export default function LessonSidebar({
   setSelectedLessonId,
   formatDuration,
   loading,
+  setOpenQuiz,
+  setSelectedQuiz,
 }: LessonSidebarProps) {
   return (
     <aside className="w-96 bg-white text-gray-900 border-l border-gray-200 flex flex-col">
@@ -76,6 +82,46 @@ export default function LessonSidebar({
                       <span className="text-xs">
                         {les?.duration ? formatDuration(les.duration) : "0:00"}
                       </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {openChapters[chap._id] && quiz[chap._id] && (
+                <ul className="mt-2 space-y-2 text-sm">
+                  {(quiz[chap._id] || []).map((qz) => (
+                    <li
+                      key={qz._id}
+                      onClick={() => {
+                        setSelectedLessonId(qz._id);
+                        setSelectedQuiz(qz);
+                        setOpenQuiz(true);
+                      }}
+                      className={`cursor-pointer p-2 rounded-md flex items-center justify-between
+              ${
+                selectedLessonId === qz._id
+                  ? "bg-green-100 text-green-600 font-semibold"
+                  : "bg-white text-gray-700 hover:bg-gray-50"
+              }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="size-4"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                          />
+                        </svg>
+
+                        {qz.title}
+                      </div>
+                      <span className="text-xs">Quiz</span>
                     </li>
                   ))}
                 </ul>

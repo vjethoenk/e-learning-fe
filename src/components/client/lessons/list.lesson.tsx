@@ -8,12 +8,14 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import {
   getAllApiLesson,
   getAllChapter,
+  getAllQuiz,
   getChapterLessonCount,
 } from "@/services/api";
 
 import LessonPlayer from "./player.lesson";
 import LessonSidebar from "./sidebar.lesson";
 import LessonFooter from "./footer.lesson";
+import QuizModal from "./quiz.lesson";
 
 export default function ListLesson() {
   const { id } = useParams<{ id: string }>();
@@ -24,9 +26,12 @@ export default function ListLesson() {
   const [lesson, setLesson] = useState<{ [chapterId: string]: ILessonTable[] }>(
     {}
   );
+  const [quiz, setQuiz] = useState<{ [chapterId: string]: IQuizTable[] }>({});
   const [openChapters, setOpenChapters] = useState<{ [id: string]: boolean }>(
     {}
   );
+  const [selectedQuiz, setSelectedQuiz] = useState<IQuizTable | null>(null);
+  const [openQuiz, setOpenQuiz] = useState<boolean>(false);
   const [currentLesson, setCurrentLesson] = useState<ILessonTable | null>(null);
   const [selectedLessonId, setSelectedLessonId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -58,6 +63,13 @@ export default function ListLesson() {
               setSelectedLessonId(lessonRes.data.result[0]._id);
             }
           }
+          const quizRes = await getAllQuiz(firstChapterId);
+          if (quizRes.data) {
+            setQuiz((prev) => ({
+              ...prev,
+              [firstChapterId]: quizRes.data,
+            }));
+          }
         }
       }
       setLoading(false);
@@ -74,10 +86,23 @@ export default function ListLesson() {
         setLesson((prev) => ({ ...prev, [chapterId]: res.data.result }));
       }
     }
+    if (!quiz[chapterId] || quiz[chapterId].length === 0) {
+      const resQuiz = await getAllQuiz(chapterId);
+      if (resQuiz.data) {
+        // nếu API trả về data chứ không phải result
+        const quizData = resQuiz.data.result || resQuiz.data || [];
+        setQuiz((prev) => ({
+          ...prev,
+          [chapterId]: quizData,
+        }));
+      }
+    }
   };
 
   const goToLesson = (direction: "prev" | "next") => {
     if (!currentLesson) return;
+
+    // tìm chapter hiện tại chứa bài học
     const currentChap = chapter.find((chap) =>
       lesson[chap._id]?.some((les) => les._id === currentLesson._id)
     );
@@ -88,17 +113,43 @@ export default function ListLesson() {
       (l) => l._id === currentLesson._id
     );
 
-    if (direction === "prev" && currentIndex > 0) {
-      const prevLesson = currentLessonList[currentIndex - 1];
-      setCurrentLesson(prevLesson);
-      setSelectedLessonId(prevLesson._id);
-    } else if (
-      direction === "next" &&
-      currentIndex < currentLessonList.length - 1
-    ) {
-      const nextLesson = currentLessonList[currentIndex + 1];
-      setCurrentLesson(nextLesson);
-      setSelectedLessonId(nextLesson._id);
+    if (direction === "prev") {
+      if (currentIndex > 0) {
+        // chuyển sang lesson trước đó
+        const prevLesson = currentLessonList[currentIndex - 1];
+        setCurrentLesson(prevLesson);
+        setSelectedLessonId(prevLesson._id);
+      } else {
+        // nếu hết thì lùi sang chapter trước
+        const currentChapIndex = chapter.findIndex(
+          (c) => c._id === currentChap._id
+        );
+        const prevChap = chapter[currentChapIndex - 1];
+        if (prevChap && lesson[prevChap._id]?.length > 0) {
+          const prevLessonList = lesson[prevChap._id];
+          const lastLesson = prevLessonList[prevLessonList.length - 1];
+          setCurrentLesson(lastLesson);
+          setSelectedLessonId(lastLesson._id);
+        }
+      }
+    } else if (direction === "next") {
+      if (currentIndex < currentLessonList.length - 1) {
+        // chuyển sang lesson tiếp theo
+        const nextLesson = currentLessonList[currentIndex + 1];
+        setCurrentLesson(nextLesson);
+        setSelectedLessonId(nextLesson._id);
+      } else {
+        // nếu hết thì nhảy sang chapter tiếp theo
+        const currentChapIndex = chapter.findIndex(
+          (c) => c._id === currentChap._id
+        );
+        const nextChap = chapter[currentChapIndex + 1];
+        if (nextChap && lesson[nextChap._id]?.length > 0) {
+          const firstLesson = lesson[nextChap._id][0];
+          setCurrentLesson(firstLesson);
+          setSelectedLessonId(firstLesson._id);
+        }
+      }
     }
   };
 
@@ -143,6 +194,11 @@ export default function ListLesson() {
             loading={loading}
             formatDuration={formatDuration}
           />
+          <QuizModal
+            open={openQuiz}
+            onClose={() => setOpenQuiz(false)}
+            quiz={selectedQuiz}
+          />
         </div>
 
         {/* Sidebar */}
@@ -150,6 +206,7 @@ export default function ListLesson() {
         <LessonSidebar
           chapter={chapter}
           lesson={lesson}
+          quiz={quiz}
           openChapters={openChapters}
           toggleChapter={toggleChapter}
           setCurrentLesson={setCurrentLesson}
@@ -157,6 +214,8 @@ export default function ListLesson() {
           setSelectedLessonId={setSelectedLessonId}
           formatDuration={formatDuration}
           loading={loading}
+          setOpenQuiz={setOpenQuiz}
+          setSelectedQuiz={setSelectedQuiz}
         />
       </div>
 

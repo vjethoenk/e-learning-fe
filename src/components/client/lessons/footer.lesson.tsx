@@ -1,5 +1,3 @@
-import { BookmarkIcon } from "@heroicons/react/24/solid";
-
 interface LessonFooterProps {
   goToLesson: (direction: "prev" | "next") => void;
 }

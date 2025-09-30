@@ -25,6 +25,7 @@ import Checkout from "./pages/client/checkout";
 import PaymentSuccess from "./components/client/checkout/success.checkout";
 import PaymentFail from "./components/client/checkout/fail.checkout";
 import LessonPage from "./pages/client/lesson";
+import Quiz from "./pages/admin/quiz";
 
 const router = createBrowserRouter([
   {
@@ -101,6 +102,10 @@ const router = createBrowserRouter([
       {
         path: "/admin/lesson",
         element: <Lesson></Lesson>,
+      },
+      {
+        path: "/admin/quiz",
+        element: <Quiz></Quiz>,
       },
     ],
   },

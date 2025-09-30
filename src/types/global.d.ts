@@ -134,4 +134,23 @@ declare global {
     };
     isDeleted: boolean;
   }
+  interface IQuizTable {
+    _id: string;
+    section_id: string;
+    title: string;
+  }
+
+  interface IQuestionsTable {
+    _id: string;
+    quiz_id: string;
+    questionText: string;
+    answers: IAnswersTable[];
+  }
+  interface IAnswersTable {
+    _id: string;
+    question_id: string;
+    answerText: string;
+    order: number;
+    isCorrect: false;
+  }
 }
