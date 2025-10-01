@@ -12,14 +12,14 @@ export const callLogin = async (username: string, password: string) => {
 };
 
 export const callRegister = async (
-  fullName: string,
+  name: string,
   email: string,
   password: string,
-  phone: string
+  phone: number
 ) => {
   await new Promise((r) => setTimeout(r, 1000));
-  return axios.post<IBackendRes<IRegister>>("/user/register", {
-    fullName,
+  return axios.post<IBackendRes<IRegister>>("/users/register", {
+    name,
     email,
     password,
     phone,

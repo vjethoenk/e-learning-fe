@@ -60,7 +60,6 @@ export default function QuizModal({ open, onClose, quiz }: QuizModalProps) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-xl p-6">
-        {/* Header */}
         <div className="flex justify-between items-center border-b pb-3">
           <h2 className="text-lg text-gray-900 font-semibold">{quiz.title}</h2>
           <button
@@ -71,7 +70,6 @@ export default function QuizModal({ open, onClose, quiz }: QuizModalProps) {
           </button>
         </div>
 
-        {/* Nếu đã nộp bài thì hiển thị kết quả tổng */}
         {result && (
           <div className="mt-4 text-center">
             <div className="text-lg font-semibold text-gray-800 flex items-center justify-center gap-1">
@@ -158,7 +156,7 @@ export default function QuizModal({ open, onClose, quiz }: QuizModalProps) {
                       type="radio"
                       name={currentQuestion._id}
                       checked={isSelected}
-                      disabled={!!result} // khóa khi đã nộp
+                      disabled={!!result}
                       onChange={() =>
                         handleSelectAnswer(currentQuestion._id, ans._id)
                       }
