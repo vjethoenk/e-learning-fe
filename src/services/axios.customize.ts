@@ -1,7 +1,8 @@
 import axios from "axios";
-
+const URL = import.meta.env.BACKEND_URL;
+const BASE_URL = import.meta.env.MODE === "development" ? URL : "/api";
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_URL,
+  baseURL: BASE_URL,
 });
 
 // Add a request interceptor

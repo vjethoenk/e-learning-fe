@@ -26,11 +26,11 @@ const TableQuiz = () => {
   const [openModelCreate, setOpenModelCreate] = useState<boolean>(false);
   const [openModelCreateQuiz, setOpenModelCreateQuiz] =
     useState<boolean>(false);
-  const [openModelUpdate, setOpenModelUpdate] = useState<boolean>(false);
-  const [openModelDelete, setOpenModelDelete] = useState<boolean>(false);
-  const [openModelDetail, setOpenModelDetail] = useState<boolean>(false);
+  // const [openModelUpdate, setOpenModelUpdate] = useState<boolean>(false);
+  // const [openModelDelete, setOpenModelDelete] = useState<boolean>(false);
+  // const [openModelDetail, setOpenModelDetail] = useState<boolean>(false);
 
-  const [idDelete, setIdDelete] = useState("");
+  // const [idDelete, setIdDelete] = useState("");
 
   const fetchDataCourse = async () => {
     let res = await getAllCourseByUserId(user?._id as string, "");
