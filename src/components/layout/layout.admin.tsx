@@ -332,8 +332,8 @@ const LayoutAdmin = () => {
                   </ul>
                 </li>
                 <li>
-                  <a
-                    href=""
+                  <Link
+                    to={"/admin/message"}
                     className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group"
                   >
                     <svg
@@ -349,9 +349,9 @@ const LayoutAdmin = () => {
                       ></path>
                     </svg>
                     <span className="ml-3 flex-1 whitespace-nowrap">
-                      Products
+                      Message
                     </span>
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <a

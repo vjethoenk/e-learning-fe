@@ -153,4 +153,18 @@ declare global {
     order: number;
     isCorrect: false;
   }
+
+  interface IListChat {
+    _id: string;
+    participants: string[];
+    otherUser: IUserTable;
+    lastMessage: {
+      _id: string;
+      chatId: string;
+      senderId: string | IUserTable;
+      content: string;
+      updatedAt: Date;
+      readBy?: string[];
+    };
+  }
 }

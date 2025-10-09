@@ -3,6 +3,9 @@ import {
   ChevronUpIcon,
   CheckCircleIcon,
 } from "@heroicons/react/24/outline";
+import { useState } from "react";
+import ChatModal from "./chat.modal";
+import { useCurrentApp } from "@/components/context/app.context";
 
 interface LessonSidebarProps {
   chapter: IChapterTable[];
@@ -33,6 +36,12 @@ export default function LessonSidebar({
   setOpenQuiz,
   setSelectedQuiz,
 }: LessonSidebarProps) {
+  const [openChat, setOpenChat] = useState(false);
+  const { user } = useCurrentApp();
+
+  const teacher = { id: "68c5b17b19076e226eac4b6d", name: "GV Nguyễn Văn A" };
+  const currentUserId = user?._id as string; // ID user đang đăng nhập
+
   return (
     <aside className="w-96 bg-white text-gray-900 border-l border-gray-200 flex flex-col">
       <div className="p-4 border-b">
@@ -133,7 +142,10 @@ export default function LessonSidebar({
 
       {/* Chat Support */}
       <div className="p-4 border-t">
-        <button className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
+        <button
+          className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+          onClick={() => setOpenChat(true)}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -149,6 +161,13 @@ export default function LessonSidebar({
           Nhắn tin trao đổi với
         </button>
       </div>
+      <ChatModal
+        open={openChat}
+        onClose={() => setOpenChat(false)}
+        teacherId={teacher.id}
+        currentUserId={currentUserId}
+        teacherName={teacher.name}
+      />
     </aside>
   );
 }

@@ -246,3 +246,24 @@ export const getQuestionById = async (id: string) => {
   return await axios.get(`/quizzes/ques/${id}`);
 };
 //end
+
+export const getUserChats = (userId: string) =>
+  axios.get(`/chats/user/${userId}`);
+
+export const getMessages = (chatId: string) =>
+  axios.get(`/chats/${chatId}/messages`);
+
+export const createChat = (participants: string[]) =>
+  axios.post(`/chats`, { participants });
+
+export const sendMessage = (
+  chatId: string,
+  senderId: string,
+  content: string
+) => axios.post(`/chats/${chatId}/messages`, { senderId, content });
+
+export const getOrCreateChat = (userId: string, teacherId: string) =>
+  axios.post("/chats/get-or-create", { userId, teacherId });
+
+export const markAsRead = (chatId: string, userId: string) =>
+  axios.post(`/api/chats/${chatId}/messages/read`, { userId });

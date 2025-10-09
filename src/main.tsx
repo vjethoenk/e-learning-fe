@@ -26,6 +26,7 @@ import PaymentSuccess from "./components/client/checkout/success.checkout";
 import PaymentFail from "./components/client/checkout/fail.checkout";
 import LessonPage from "./pages/client/lesson";
 import Quiz from "./pages/admin/quiz";
+import Message from "./pages/admin/message";
 
 const router = createBrowserRouter([
   {
@@ -106,6 +107,10 @@ const router = createBrowserRouter([
       {
         path: "/admin/quiz",
         element: <Quiz></Quiz>,
+      },
+      {
+        path: "/admin/message",
+        element: <Message></Message>,
       },
     ],
   },

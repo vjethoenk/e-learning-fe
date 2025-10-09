@@ -10,7 +10,7 @@ interface PaginationProps {
 
 const Pagination = ({ meta, onPageChange }: PaginationProps) => {
   const { current, pages } = meta;
-  console.log("Current: ", current);
+  // console.log("Current: ", current);
   // Hàm tạo dãy số phân trang với ...
   const getPageNumbers = (
     current: number,

@@ -53,7 +53,6 @@ export default function CourseList() {
 
   return (
     <>
-      {" "}
       <section className="relative bg-blue-700">
         {/* Background overlay */}
         <div className="absolute inset-0">
@@ -66,13 +65,13 @@ export default function CourseList() {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-6  py-40 text-white">
-          <div className="w-[700px]">
-            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 py-20 md:py-40 text-white">
+          <div className="max-w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight animate-fadeIn">
               Khám phá tất cả các khóa học của
               <span className="text-blue-300 ml-3">F4-FullStack</span>
             </h1>
-            <p className="mt-6 text-lg text-blue-100 max-w-3xl">
+            <p className="mt-6 text-lg text-blue-100 max-w-3xl animate-fadeIn delay-150">
               Khám phá các khóa học thuộc nhiều lĩnh vực đa dạng và tìm kiếm đam
               mê của bạn. Từ công nghệ đến nghệ thuật, kinh doanh đến khoa học -
               chúng tôi có khóa học dành cho tất cả mọi người.
@@ -80,6 +79,7 @@ export default function CourseList() {
           </div>
         </div>
       </section>
+
       <div className="max-w-7xl mx-auto my-12 bg-white border rounded-xl p-3 flex flex-col md:flex-row items-center gap-2 shadow-sm">
         {/* Category */}
         <div className="flex items-center gap-2 w-full md:w-52">

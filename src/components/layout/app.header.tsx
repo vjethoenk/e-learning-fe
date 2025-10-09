@@ -2,12 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { useCurrentApp } from "../context/app.context";
 import { Link, NavLink } from "react-router-dom";
 import { callLogout } from "@/services/api";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"; // Heroicons
 
 const AppHeader: React.FC = () => {
   const { isAuthenticated, user, setUser, setIsAuthenticated } =
     useCurrentApp();
 
   const [openUserMenu, setOpenUserMenu] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
   const menuItems = [
@@ -18,6 +20,7 @@ const AppHeader: React.FC = () => {
     { to: "/contact", label: "Liên hệ" },
   ];
 
+  // Đóng user menu khi click ngoài
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -62,7 +65,6 @@ const AppHeader: React.FC = () => {
               />
             </svg>
           </div>
-
           <span className="text-2xl font-extrabold tracking-wide">
             <span className="text-blue-600">F4</span>
             <span className="bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 bg-clip-text text-transparent ml-1">
@@ -71,7 +73,7 @@ const AppHeader: React.FC = () => {
           </span>
         </div>
 
-        {/* Nav */}
+        {/* Desktop Nav */}
         <nav className="hidden md:flex items-center space-x-6 font-medium">
           {menuItems.map((item) => (
             <NavLink
@@ -89,70 +91,150 @@ const AppHeader: React.FC = () => {
             </NavLink>
           ))}
         </nav>
-        {/* User / Auth */}
-        {isAuthenticated ? (
-          <div className="relative" ref={userMenuRef}>
-            <button
-              onClick={() => setOpenUserMenu(!openUserMenu)}
-              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium shadow-sm hover:bg-blue-700 transition"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-5 h-5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-                />
-              </svg>
-              <span>{user?.name || "Tài khoản"}</span>
-            </button>
 
-            {openUserMenu && (
-              <div className="absolute right-0 mt-2 w-44 bg-white border rounded-xl shadow-lg overflow-hidden animate-fadeIn z-50">
+        {/* User/Auth */}
+        <div className="flex items-center space-x-3">
+          {/* Mobile menu button */}
+          <button
+            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? (
+              <XMarkIcon className="w-6 h-6" />
+            ) : (
+              <Bars3Icon className="w-6 h-6" />
+            )}
+          </button>
+
+          {isAuthenticated ? (
+            <div className="relative" ref={userMenuRef}>
+              <button
+                onClick={() => setOpenUserMenu(!openUserMenu)}
+                className="hidden md:flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium shadow-sm hover:bg-blue-700 transition"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                  />
+                </svg>
+                <span>{user?.name || "Tài khoản"}</span>
+              </button>
+
+              {openUserMenu && (
+                <div className="absolute right-0 mt-2 w-44 bg-white border rounded-xl shadow-lg overflow-hidden animate-fadeIn z-50">
+                  <Link
+                    to={"/admin"}
+                    className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                  >
+                    Trang quản lý
+                  </Link>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                  >
+                    Khóa học của bạn
+                  </a>
+                  <button
+                    onClick={logout}
+                    className="w-full text-left block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                  >
+                    Đăng xuất
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="hidden md:flex items-center space-x-3">
+              <Link
+                to={"/login"}
+                className="text-gray-700 font-medium hover:text-blue-600 transition"
+              >
+                Đăng nhập
+              </Link>
+              <Link
+                to={"/register"}
+                className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold shadow-sm hover:bg-blue-700 transition"
+              >
+                Đăng ký
+              </Link>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Mobile menu */}
+      {mobileMenuOpen && (
+        <nav className="md:hidden bg-white border-t shadow-sm">
+          <div className="flex flex-col space-y-1 px-4 py-3">
+            {menuItems.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) =>
+                  `px-4 py-2 rounded-lg transition ${
+                    isActive
+                      ? "bg-blue-50 text-blue-600"
+                      : "text-gray-700 hover:bg-blue-100 hover:text-blue-600"
+                  }`
+                }
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {item.label}
+              </NavLink>
+            ))}
+
+            {isAuthenticated ? (
+              <>
                 <Link
                   to={"/admin"}
-                  className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                  className="px-4 py-2 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600"
                 >
                   Trang quản lý
                 </Link>
                 <a
                   href="#"
-                  className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                  className="px-4 py-2 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600"
                 >
                   Khóa học của bạn
                 </a>
                 <button
-                  onClick={logout}
-                  className="w-full text-left block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                  onClick={() => {
+                    logout();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="px-4 py-2 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 text-left w-full"
                 >
                   Đăng xuất
                 </button>
-              </div>
+              </>
+            ) : (
+              <>
+                <Link
+                  to={"/login"}
+                  className="px-4 py-2 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                >
+                  Đăng nhập
+                </Link>
+                <Link
+                  to={"/register"}
+                  className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold shadow-sm hover:bg-blue-700 transition"
+                >
+                  Đăng ký
+                </Link>
+              </>
             )}
           </div>
-        ) : (
-          <div className="flex items-center space-x-3">
-            <Link
-              to={"/login"}
-              className="text-gray-700 font-medium hover:text-blue-600 transition"
-            >
-              Đăng nhập
-            </Link>
-            <Link
-              to={"/register"}
-              className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold shadow-sm hover:bg-blue-700 transition"
-            >
-              Đăng ký
-            </Link>
-          </div>
-        )}
-      </div>
+        </nav>
+      )}
     </header>
   );
 };

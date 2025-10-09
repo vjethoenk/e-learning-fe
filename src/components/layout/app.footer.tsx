@@ -8,9 +8,9 @@ import {
 export default function Footer() {
   return (
     <footer className="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-gray-300 pt-12 pb-6">
-      <div className="max-w-7xl mx-auto px-6 flex justify-between gap-16">
+      <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between gap-12 md:gap-16">
         {/* Logo + description */}
-        <div className="w-[300px]">
+        <div className="w-full md:w-[300px]">
           <div className="flex items-center gap-2 mb-4">
             <div className="bg-blue-600 p-2 rounded-xl">
               <svg
@@ -63,7 +63,8 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="flex px-6 gap-[150px]">
+        {/* Links */}
+        <div className="flex flex-col sm:flex-row gap-8 md:gap-12">
           {/* Quick Links */}
           <div>
             <h3 className="text-white font-semibold mb-4">Liên kết nhanh</h3>
@@ -148,9 +149,9 @@ export default function Footer() {
       </div>
 
       {/* Bottom */}
-      <div className="border-t border-slate-700 mt-10 pt-6 text-sm text-gray-400 flex items-center justify-between max-w-7xl mx-auto">
-        <div className="">© 2025 F4-FullStack. Bảo lưu mọi quyền</div>
-        <div className=" text-gray-500">Được hỗ trợ bởi Hoang</div>
+      <div className="border-t border-slate-700 mt-10 pt-6 text-sm text-gray-400 flex flex-col sm:flex-row items-center justify-between max-w-7xl mx-auto gap-2 sm:gap-0">
+        <div>© 2025 F4-FullStack. Bảo lưu mọi quyền</div>
+        <div className="text-gray-500">Được hỗ trợ bởi Hoang</div>
       </div>
     </footer>
   );
