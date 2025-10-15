@@ -1,5 +1,5 @@
 import { useCurrentApp } from "../context/app.context";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type ProtectedRouteProps = {
   children: React.ReactNode;

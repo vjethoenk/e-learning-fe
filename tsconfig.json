@@ -1,5 +1,9 @@
 {
   "files": [],
+  "rules": {
+    "@typescript-eslint/no-unused-vars": "off"
+  },
+
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
