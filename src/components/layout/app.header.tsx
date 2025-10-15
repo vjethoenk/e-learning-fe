@@ -72,7 +72,6 @@ const AppHeader: React.FC = () => {
             </span>
           </span>
         </div>
-
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center space-x-6 font-medium">
           {menuItems.map((item) => (

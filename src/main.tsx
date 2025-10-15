@@ -10,6 +10,8 @@ import "styles/global.css";
 import { AppProvider } from "./components/context/app.context";
 import ProtectedRoute from "./components/auth";
 import LayoutAdmin from "./components/layout/layout.admin";
+import PostPage from "./pages/client/PostPage";
+import PostDetailPage from "./pages/client/PostDetailPage";
 import Dashboard from "./pages/admin/dashboard";
 import User from "./pages/admin/user";
 import "react-toastify/dist/ReactToastify.css";
@@ -36,6 +38,14 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <HomePage></HomePage>,
+      },
+      {
+        path: "/post",
+        element: <PostPage></PostPage>,
+      },
+      {
+        path: "/posts/:id",
+        element: <PostDetailPage />,
       },
       {
         path: "/courses",
