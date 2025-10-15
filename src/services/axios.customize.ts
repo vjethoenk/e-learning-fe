@@ -1,10 +1,10 @@
 import axios from "axios";
-const URL = import.meta.env.BACKEND_URL;
+const URL = "http://localhost:8080/api";
 const BASE_URL = import.meta.env.MODE === "development" ? URL : "/api";
 const instance = axios.create({
   baseURL: BASE_URL,
 });
-
+console.log("URL", URL);
 // Add a request interceptor
 instance.interceptors.request.use(
   function (config) {
