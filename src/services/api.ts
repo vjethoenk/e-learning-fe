@@ -2,6 +2,7 @@ import type { ICreateCategory } from "@/components/admin/category/create.categor
 import type { ICreateChapter } from "@/components/admin/chapter/create.chapter";
 import type { ICreateCourse } from "@/components/admin/courses/create.course";
 import type { ICreateLesson } from "@/components/admin/lessons/create.lesson";
+import type { AxiosResponse } from "axios";
 import axios from "services/axios.customize";
 export const callLogin = async (username: string, password: string) => {
   await new Promise((r) => setTimeout(r, 1000));
@@ -25,7 +26,7 @@ export const callRegister = async (
     phone,
   });
 };
-export const callFetchAccount = async () => {
+export const callFetchAccount = async (): Promise<AxiosResponse<IBackendRes<IFetchAccount>>> => {
   await new Promise((r) => setTimeout(r, 2000));
   return axios.get<IBackendRes<IFetchAccount>>("/auth/account");
 };
@@ -267,3 +268,44 @@ export const getOrCreateChat = (userId: string, teacherId: string) =>
 
 export const markAsRead = (chatId: string, userId: string) =>
   axios.post(`/api/chats/${chatId}/messages/read`, { userId });
+//post
+export const getAllPost = async (query: string = "") => {
+  return axios.get<IModelPaginate<IPostTable>>(`/posts${query}`);
+};
+
+
+// Lấy chi tiết 1 bài viết theo ID
+export const getPostById = async (id: string) => {
+  return axios.get<IBackendRes<IPostTable>>(`/posts/${id}`);
+};
+
+// Tạo mới bài viết
+export const createPost = async (data: ICreatePost) => {
+  return axios.post<IBackendRes<IPostTable>>(`/posts`, data);
+};
+
+// Cập nhật bài viết theo ID
+export const updatePost = async (id: string, data: IUpdatePost) => {
+  await new Promise((r) => setTimeout(r, 1000));
+  return axios.patch<IBackendRes<IPostTable>>(`/posts/${id}`, data);
+};
+
+// Xoá mềm bài viết
+export const deletePost = async (id: string) => {
+  return axios.delete<IBackendRes<IPostTable>>(`/posts/${id}`);
+};
+
+// Upload file thumbnail (nếu cần upload ảnh cho bài viết)
+export const uploadFilePost = async (file: File) => {
+  const formData = new FormData();
+  formData.append("fileUpload", file);
+
+  const res = await axios.post("/files/upload", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      folder_type: "post",
+    },
+  });
+
+  return res.data;
+};

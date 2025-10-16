@@ -29,6 +29,7 @@ import PaymentFail from "./components/client/checkout/fail.checkout";
 import LessonPage from "./pages/client/lesson";
 import Quiz from "./pages/admin/quiz";
 import Message from "./pages/admin/message";
+import Post from "./pages/admin/post";
 
 const router = createBrowserRouter([
   {
@@ -121,6 +122,10 @@ const router = createBrowserRouter([
       {
         path: "/admin/message",
         element: <Message></Message>,
+      },
+      {
+        path: "/admin/post",
+        element: <Post></Post>,
       },
     ],
   },

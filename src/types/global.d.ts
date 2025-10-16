@@ -167,4 +167,43 @@ declare global {
       readBy?: string[];
     };
   }
+  interface IPostTable {
+    _id: string;
+    title: string;
+    thumbnail: string;
+    content: string;
+    slug: string;
+    authorId?: string;
+    createBy: {
+      _id: string;
+      email: string;
+      name: string;
+    };
+    updateBy?: {
+      _id: string;
+      email: string;
+    };
+    deleteBy?: {
+      _id: string;
+      email: string;
+    };
+    createdAt: Date;
+    updatedAt: Date;
+    isDeleted: boolean;
+    deletedAt?: Date;
+  }
+
+  interface ICreatePost {
+    title: string;
+    content: string;
+    slug?: string;
+    authorId?: string;
+  }
+
+  interface IUpdatePost {
+    title?: string;
+    content?: string;
+    slug?: string;
+    authorId?: string;
+  }
 }

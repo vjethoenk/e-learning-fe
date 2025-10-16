@@ -34,7 +34,7 @@ const AppProvider = (props: IProps) => {
   }, []);
   return (
     <>
-      {isAppLoading === true ? (
+      {isAppLoading === false ? (
         <CurrentAppContext.Provider
           value={{
             isAuthenticated,

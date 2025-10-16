@@ -16,7 +16,7 @@ const AppHeader: React.FC = () => {
     { to: "/", label: "Trang chủ" },
     { to: "/courses", label: "Các khóa học" },
     { to: "/category", label: "Thể loại" },
-    { to: "/posts", label: "Bài viết" },
+    { to: "/post", label: "Bài viết" },
     { to: "/contact", label: "Liên hệ" },
   ];
 
