@@ -136,12 +136,12 @@ const AppHeader: React.FC = () => {
                   >
                     Trang quản lý
                   </Link>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                  <Link
+                    to={"/profile"}
+                    className="px-4 py-2 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600"
                   >
-                    Khóa học của bạn
-                  </a>
+                    Tài khoản của bạn
+                  </Link>
                   <button
                     onClick={logout}
                     className="w-full text-left block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
@@ -199,12 +199,12 @@ const AppHeader: React.FC = () => {
                 >
                   Trang quản lý
                 </Link>
-                <a
-                  href="#"
+                <Link
+                  to={"/profile"}
                   className="px-4 py-2 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600"
                 >
-                  Khóa học của bạn
-                </a>
+                  Tài khoản
+                </Link>
                 <button
                   onClick={() => {
                     logout();

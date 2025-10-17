@@ -69,6 +69,14 @@ declare global {
     age: number;
     password: string;
   }
+  interface IProfileUser {
+    name: string;
+    email: string;
+    gender: string;
+    phone: string;
+    age: number;
+    address: string;
+  }
   interface IFetchAccount {
     user: IUser;
   }
