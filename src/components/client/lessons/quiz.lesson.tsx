@@ -22,6 +22,7 @@ export default function QuizModal({ open, onClose, quiz }: QuizModalProps) {
     if (!quiz?._id) return;
     const fetchQuestion = async () => {
       const res = await getQuestionById(quiz._id);
+      console.log("📌 Quiz API response:", res.data);
       if (res?.data?.questions) {
         setQuestions(res.data.questions);
         setCurrentIndex(0);

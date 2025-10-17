@@ -226,9 +226,8 @@ export const checkCourse = async (user_id: string, course_id: string) => {
 };
 
 //Quiz Api
-export const getAllQuiz = async (id: string) => {
-  // await new Promise((r) => setTimeout(r, 2000));
-  return axios.get(`/quizzes/${id}`);
+export const getAllQuiz = async (sectionId: string) => {
+  return axios.get(`/quizzes/section/${sectionId}`);
 };
 export const getAllQuestions = async (id: string) => {
   await new Promise((r) => setTimeout(r, 2000));
@@ -246,6 +245,16 @@ export const createAnswers = async (id: string, data: {}) => {
 export const getQuestionById = async (id: string) => {
   return await axios.get(`/quizzes/ques/${id}`);
 };
+export const importQuizFromWord = async (chapterId: string, file: File) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  return axios.post(`/quizzes/import/${chapterId}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
 //end
 
 export const getUserChats = (userId: string) =>
