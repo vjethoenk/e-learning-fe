@@ -340,6 +340,7 @@ export const uploadFilePost = async (file: File) => {
       folder_type: "post",
     },
   });
+  return res.data;
 };
 
 export const getStudentsByTeacher = async (teacherId?: string) => {
