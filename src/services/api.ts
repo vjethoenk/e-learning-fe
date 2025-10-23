@@ -47,12 +47,25 @@ export const updateUser = async (data: ICreateUser, id: string) => {
   await new Promise((r) => setTimeout(r, 2000));
   return axios.put<IBackendRes<ICreateUser>>(`/users/${id}`, data);
 };
+export const updateProfile = async (data: IProfileUser, id: string) => {
+  await new Promise((r) => setTimeout(r, 2000));
+  return axios.put<IBackendRes<IProfileUser>>(`/users/profile/${id}`, data);
+};
 export const deleteUser = async (id: string) => {
   return axios.delete<IBackendRes<IUserTable>>(`users/${id}`);
 };
 export const getByUserId = async (id: string) => {
   return axios.get<IBackendRes<IUserTable>>(`users/${id}`);
 };
+
+export const updatePassword = (userId: string, data: any) => {
+  return axios.put(`/users/password/${userId}`, data);
+};
+
+export const getCoursesByUser = (userId: string) => {
+  return axios.get(`/courses/user/${userId}`);
+};
+
 //End User
 
 //Category
@@ -327,6 +340,16 @@ export const uploadFilePost = async (file: File) => {
       folder_type: "post",
     },
   });
+};
 
+export const getStudentsByTeacher = async (teacherId?: string) => {
+  const res = await axios.get(`/enrollments/by-teacher/${teacherId}`);
   return res.data;
 };
+
+//Thống kê
+export const getDashboardStats = async () => {
+  const res = await axios.get(`/enrollments/statistics`);
+  return res.data;
+};
+  

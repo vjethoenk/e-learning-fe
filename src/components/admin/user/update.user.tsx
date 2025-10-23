@@ -72,7 +72,7 @@ const UpdateUser = (props: IProps) => {
     e.preventDefault();
     try {
       const id = dataUser?._id as string;
-      console.log("Id User update: ", id);
+
       const res = await updateUser(formData, id);
       if (res.data) {
         toast.success("User update successfully!");

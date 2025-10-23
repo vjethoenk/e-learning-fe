@@ -30,6 +30,8 @@ import LessonPage from "./pages/client/lesson";
 import Quiz from "./pages/admin/quiz";
 import Message from "./pages/admin/message";
 import Post from "./pages/admin/post";
+import StudentList from "./components/admin/student/list.student";
+import Profile from "./pages/client/profife";
 
 const router = createBrowserRouter([
   {
@@ -81,6 +83,10 @@ const router = createBrowserRouter([
         path: "/lesson/:id",
         element: <LessonPage></LessonPage>,
       },
+      {
+        path: "/profile",
+        element: <Profile></Profile>,
+      },
     ],
   },
   {
@@ -126,6 +132,10 @@ const router = createBrowserRouter([
       {
         path: "/admin/post",
         element: <Post></Post>,
+      },
+      {
+        path: "/admin/student",
+        element: <StudentList></StudentList>,
       },
     ],
   },
