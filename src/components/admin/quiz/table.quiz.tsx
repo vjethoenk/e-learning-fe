@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import CreateQuestion from "./create.question";
 import CreateQuiz from "./create.quiz";
 import { toast } from "react-toastify";
+import EditQuestionModal from "./create.question";
 
 const TableQuiz = () => {
   const { user } = useCurrentApp();
@@ -28,7 +29,9 @@ const TableQuiz = () => {
   const [selectedChapter, setSelectedChapter] = useState<IChapterTable | null>(
     null
   );
-
+  const [openEditQuestion, setOpenEditQuestion] = useState(false);
+  const [editingQuestion, setEditingQuestion] =
+    useState<IQuestionsTable | null>(null);
   const [quiz, setQuiz] = useState<IQuizTable[]>([]);
   const [question, setQuestion] = useState<IQuestionsTable[]>([]);
   const [idQuiz, setIdQuiz] = useState("");
@@ -290,7 +293,19 @@ const TableQuiz = () => {
                     ) : (
                       question.map((ques) => (
                         <div key={ques._id} className="mb-2">
-                          <p className="font-medium">{ques.questionText}</p>
+                          <div className="flex justify-between items-start">
+                            <p className="font-medium">{ques.questionText}</p>
+                            <button
+                              onClick={() => {
+                                setEditingQuestion(ques);
+                                setOpenEditQuestion(true);
+                                setIdQuiz(q._id); // ✅ lưu lại quiz hiện tại để reload đúng quiz sau khi update
+                              }}
+                              className="text-blue-600 hover:text-blue-800 text-sm"
+                            >
+                              ✏️
+                            </button>
+                          </div>
                           <ul className="list-disc pl-6 text-sm">
                             {Array.isArray(ques.answers) &&
                             ques.answers.length > 0 ? (
@@ -366,11 +381,11 @@ const TableQuiz = () => {
       )}
 
       {/* 🔸 Modal tạo câu hỏi + quiz */}
-      <CreateQuestion
-        openModelCreate={openModelCreate}
-        setOpenModelCreate={setOpenModelCreate}
-        reloadTable={reloadTable}
-        idQuiz={idQuiz}
+      <EditQuestionModal
+        open={openEditQuestion}
+        setOpen={setOpenEditQuestion}
+        question={editingQuestion}
+        onUpdated={() => reloadTable(idQuiz)}
       />
       <CreateQuiz
         openModelCreate={openModelCreateQuiz}
