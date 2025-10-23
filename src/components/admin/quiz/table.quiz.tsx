@@ -6,7 +6,9 @@ import {
   getAllCourseByUserId,
   getAllQuestions,
   getAllQuiz,
-  importQuizFromWord, // 🟡 API import quiz từ Word
+  importQuizFromWord,
+  updateQuiz, // ✅ thêm
+  deleteQuiz, // 🟡 API import quiz từ Word
 } from "@/services/api";
 import { Listbox } from "@headlessui/react";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
@@ -233,12 +235,50 @@ const TableQuiz = () => {
           <div className="space-y-2">
             {quiz.map((q) => (
               <div key={q._id} className="border rounded-lg p-3 bg-gray-50">
-                <div
-                  className="flex justify-between items-center cursor-pointer"
-                  onClick={() => toggleQuestions(q._id)}
-                >
-                  <span className="font-semibold">{q.title}</span>
-                  <span>{openQuiz === q._id ? "▲" : "▼"}</span>
+                <div className="flex justify-between items-center">
+                  <div
+                    className="flex-1 cursor-pointer"
+                    onClick={() => toggleQuestions(q._id)}
+                  >
+                    <span className="font-semibold">{q.title}</span>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        const newTitle = prompt(
+                          "Nhập tiêu đề mới cho quiz:",
+                          q.title
+                        );
+                        if (newTitle) {
+                          updateQuiz(q._id, { title: newTitle })
+                            .then(() => {
+                              toast.success("Cập nhật quiz thành công!");
+                              fetchDataQuiz(selectedChapter?._id || "");
+                            })
+                            .catch(() => toast.error("Lỗi khi cập nhật quiz"));
+                        }
+                      }}
+                      className="text-blue-600 hover:text-blue-800 text-sm"
+                    >
+                      ✏️
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (confirm("Bạn có chắc muốn xóa quiz này không?")) {
+                          deleteQuiz(q._id)
+                            .then(() => {
+                              toast.success("Đã xóa quiz");
+                              fetchDataQuiz(selectedChapter?._id || "");
+                            })
+                            .catch(() => toast.error("Xóa quiz thất bại"));
+                        }
+                      }}
+                      className="text-red-600 hover:text-red-800 text-sm"
+                    >
+                      🗑️
+                    </button>
+                  </div>
                 </div>
 
                 {openQuiz === q._id && (

@@ -1,14 +1,35 @@
+"use client";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getPosts } from "@/api/fakeApi";
+import { getAllPost } from "@/services/api"; // ← dùng API thật
 
 const PostPage = () => {
   const [posts, setPosts] = useState<any[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
-
+  const [queryParams, setQueryParams] = useState({
+    current: 1,
+    pageSize: 6,
+    sort: "-createdAt",
+    title: "",
+  });
   useEffect(() => {
-    getPosts().then(setPosts);
+    const fetchPosts = async () => {
+      try {
+        const { current, pageSize, sort, title } = queryParams;
+        let query = `?current=${current}&pageSize=${pageSize}&sort=${sort}`;
+        if (title) query += `&title=/${title}/i`;
+
+        const res = await getAllPost(query);
+        if (res.data) {
+          setPosts(res.data.result || res.data);
+        } // ← dữ liệu thực từ API bạn gửi
+      } catch (err) {
+        console.error("Error loading posts", err);
+      }
+    };
+    fetchPosts();
   }, []);
+
   const categories = [
     "Front-end / Mobile apps",
     "Back-end / Devops",
@@ -23,27 +44,31 @@ const PostPage = () => {
         <div className="space-y-6">
           {posts.map((post) => (
             <Link
-              to={`/posts/${post.id}`}
-              key={post.id}
+              to={`/posts/${post._id}`}
+              key={post._id}
               className="block bg-white border rounded-2xl p-5 flex items-start justify-between hover:shadow-md transition"
             >
               <div className="flex-1 pr-4">
                 <p className="text-sm font-medium text-gray-700 mb-1">
-                  {post.author.name}
+                  {post.createBy?.name || "Admin"}
                 </p>
                 <h3 className="font-bold text-lg leading-snug mb-2">
                   {post.title}
                 </h3>
-                <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-                  {post.desc}
-                </p>
+                <p
+                  className="text-gray-600 text-sm mb-3 line-clamp-2"
+                  dangerouslySetInnerHTML={{ __html: post.content }}
+                />
                 <div className="flex items-center gap-2 text-sm text-gray-500">
-                  <span>{new Date(post.date).toLocaleDateString()}</span>
-                  <span>· {post.readTime}</span>
+                  <span>{new Date(post.createdAt).toLocaleDateString()}</span>
                 </div>
               </div>
               <img
-                src={post.thumbnail}
+                src={
+                  import.meta.env.VITE_BACKEND_URL +
+                  "/images/post/" +
+                  post.thumbnail
+                }
                 alt={post.title}
                 className="w-36 h-24 object-cover rounded-lg"
               />
@@ -51,6 +76,8 @@ const PostPage = () => {
           ))}
         </div>
       </div>
+
+      {/* Sidebar */}
       <div className="col-span-12 lg:col-span-4 space-y-6">
         {/* Categories */}
         <div>
@@ -74,7 +101,7 @@ const PostPage = () => {
           </div>
         </div>
 
-        {/* Banner (dummy) */}
+        {/* Banner */}
         <div className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white p-6 rounded-2xl">
           <h4 className="text-lg font-bold mb-3">Khóa học HTML CSS PRO</h4>
           <ul className="space-y-2 text-sm">

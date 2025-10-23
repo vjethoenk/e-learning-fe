@@ -245,6 +245,18 @@ export const createAnswers = async (id: string, data: {}) => {
 export const getQuestionById = async (id: string) => {
   return await axios.get(`/quizzes/ques/${id}`);
 };
+export const updateQuiz = async (id: string, data: {}) => {
+  return axios.patch(`/quizzes/${id}`, data);
+};
+export const updateQuestion = async (questionId: string, data: {}) => {
+  return axios.patch(`/quizzes/questions/${questionId}`, data);
+};
+export const deleteQuestion = async (questionId: string) => {
+  return axios.delete(`/quizzes/questions/${questionId}`);
+};
+export const deleteQuiz = async (id: string) => {
+  return axios.delete(`/quizzes/${id}`);
+};
 export const importQuizFromWord = async (chapterId: string, file: File) => {
   const formData = new FormData();
   formData.append("file", file);
