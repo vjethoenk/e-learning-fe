@@ -5,9 +5,10 @@ import {
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import Dropdown from "@/common/Dropdown";
-import { getAllCourse } from "@/services/api";
+import { checkCourse, getAllCourse } from "@/services/api";
 import PaginationPage from "@/common/PaginationPage";
 import { Link } from "react-router-dom";
+import { useCurrentApp } from "@/components/context/app.context";
 
 export default function CourseList() {
   const categoryOptions = [
@@ -35,6 +36,7 @@ export default function CourseList() {
     pages: number;
   } | null>(null);
   const [category, setCategory] = useState("all");
+  const { user } = useCurrentApp();
   const [courses, setCourses] = useState<ICourseTable[]>([]);
   const [sort, setSort] = useState("popular");
 
@@ -44,8 +46,18 @@ export default function CourseList() {
       const query = `?current=${current}&pageSize=${pageSize}`;
       const res = await getAllCourse(query);
       if (res.data) {
-        setCourses(res.data.result);
         setMeta(res.data.meta);
+        if (user?._id === undefined) {
+          setCourses(res.data.result);
+        } else {
+          const checkPayment = await Promise.all(
+            res.data.result.map(async (c: ICourseTable) => {
+              const daThanhToan = await checkCourse(user?._id as string, c._id);
+              return { ...c, kiemTraThanhToan: daThanhToan.data.isEnrolled };
+            })
+          );
+          setCourses(checkPayment);
+        }
       }
     };
     fetchDataCourse();
@@ -80,42 +92,7 @@ export default function CourseList() {
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto my-12 bg-white border rounded-xl p-3 flex flex-col md:flex-row items-center gap-2 shadow-sm">
-        {/* Category */}
-        <div className="flex items-center gap-2 w-full md:w-52">
-          <FolderIcon className="w-5 h-5 text-blue-600 shrink-0" />
-          <Dropdown
-            label=""
-            selected={
-              categoryOptions.find((o) => o.value === category)?.label ?? ""
-            }
-            options={categoryOptions}
-            onSelect={setCategory}
-          />
-        </div>
-
-        {/* Sort */}
-        <div className="flex items-center gap-2 w-full md:w-52">
-          <Bars3BottomLeftIcon className="w-5 h-5 text-blue-600 shrink-0" />
-          <Dropdown
-            label=""
-            selected={sortOptions.find((o) => o.value === sort)?.label ?? ""}
-            options={sortOptions}
-            onSelect={setSort}
-          />
-        </div>
-
-        {/* Search */}
-        <div className="relative w-full md:flex-1">
-          <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search courses..."
-            className="w-full pl-10 pr-3 py-2 border rounded-lg text-sm outline-none bg-gray-50 focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-      </div>
-      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto mb-12">
+      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto mb-12 mt-12">
         {courses.map((course) => (
           <div
             key={course._id}
@@ -162,12 +139,22 @@ export default function CourseList() {
               </span>
             </div>
 
-            <Link to={`/courses/${course._id}`}>
-              {" "}
-              <button className="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+            {course.kiemTraThanhToan === false || user?._id === undefined ? (
+              <Link
+                to={`/courses/${course._id}`}
+                className="mt-6 w-full bg-blue-600 text-white text-center py-2 rounded-lg hover:bg-blue-700 transition"
+              >
                 Đăng ký ngay
-              </button>
-            </Link>
+              </Link>
+            ) : (
+              <Link
+                to={`/lesson/${course?._id}`}
+                state={{ course }}
+                className="mt-6 w-full bg-blue-600 text-white text-center py-2 rounded-lg hover:bg-blue-700 transition"
+              >
+                Vào học ngay
+              </Link>
+            )}
           </div>
         ))}
       </div>

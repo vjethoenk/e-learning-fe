@@ -1,19 +1,34 @@
-import { getAllCourse } from "@/services/api";
+import { useCurrentApp } from "@/components/context/app.context";
+import { checkCourse, getAllCourse } from "@/services/api";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function FeaturedCourses() {
   const [course, setCourse] = useState<ICourseTable[]>([]);
+
+  const { user } = useCurrentApp();
   useEffect(() => {
     const fetchDataCourse = async () => {
       const query = "?current=1&pageSize==3";
       const res = await getAllCourse(query);
       if (res.data) {
-        setCourse(res.data.result);
+        if (user?._id === undefined) {
+          setCourse(res.data.result);
+        } else {
+          const checkPayment = await Promise.all(
+            res.data.result.map(async (c: ICourseTable) => {
+              const daThanhToan = await checkCourse(user?._id as string, c._id);
+              return { ...c, kiemTraThanhToan: daThanhToan.data.isEnrolled };
+            })
+          );
+          setCourse(checkPayment);
+        }
+        //setCourse(res.data.result);
       }
     };
     fetchDataCourse();
   }, []);
+
   return (
     <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -75,13 +90,22 @@ export default function FeaturedCourses() {
                   {course.createBy.name}
                 </span>
               </div>
-
-              <Link
-                to={`/courses/${course._id}`}
-                className="mt-6 w-full bg-blue-600 text-white text-center py-2 rounded-lg hover:bg-blue-700 transition"
-              >
-                Đăng ký ngay
-              </Link>
+              {course.kiemTraThanhToan === false || user?._id === undefined ? (
+                <Link
+                  to={`/courses/${course._id}`}
+                  className="mt-6 w-full bg-blue-600 text-white text-center py-2 rounded-lg hover:bg-blue-700 transition"
+                >
+                  Đăng ký ngay
+                </Link>
+              ) : (
+                <Link
+                  to={`/lesson/${course?._id}`}
+                  state={{ course }}
+                  className="mt-6 w-full bg-blue-600 text-white text-center py-2 rounded-lg hover:bg-blue-700 transition"
+                >
+                  Vào học ngay
+                </Link>
+              )}
             </div>
           ))}
         </div>
