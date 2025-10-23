@@ -208,12 +208,12 @@ const TableQuiz = () => {
 
             {/* Nút thêm & import */}
             <div className="flex items-center space-x-2 ml-auto">
-              <button
+              {/* <button
                 onClick={() => setOpenModelCreateQuiz(true)}
                 className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 rounded-lg text-sm px-3 py-2"
               >
                 ➕ Add Quiz
-              </button>
+              </button> */}
               <button
                 onClick={() => setOpenImportModal(true)}
                 className="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-200 rounded-lg text-sm px-3 py-2"
