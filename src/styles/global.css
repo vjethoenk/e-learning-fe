@@ -1,6 +1,7 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 :root {
   --container-padding-x: 0.75rem; /* ~12px, giống Bootstrap */

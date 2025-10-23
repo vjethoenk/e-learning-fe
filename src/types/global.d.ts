@@ -111,6 +111,7 @@ declare global {
       name: string;
     };
     createdAt: date;
+    kiemTraThanhToan?: boolean;
   }
   interface IChapterTable {
     _id: string;
